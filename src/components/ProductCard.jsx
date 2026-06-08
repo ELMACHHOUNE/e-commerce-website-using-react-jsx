@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 import {
   Card,
   CardContent,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 
 export default function ProductCard({ product }) {
+  const { addItem, toggle } = useCart();
   return (
     <Card className="overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-950/10">
       <div className="aspect-square overflow-hidden bg-slate-50">
@@ -39,7 +41,13 @@ export default function ProductCard({ product }) {
         </span>
       </CardContent>
       <CardFooter className="border-t-0 bg-transparent pt-0">
-        <Button className="w-full bg-slate-950 hover:bg-slate-800">
+        <Button
+          className="w-full bg-slate-950 hover:bg-slate-800"
+          onClick={() => {
+            addItem(product);
+            toggle(true);
+          }}
+        >
           Add to cart
         </Button>
       </CardFooter>

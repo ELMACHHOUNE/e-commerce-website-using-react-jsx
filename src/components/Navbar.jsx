@@ -1,7 +1,9 @@
-import { Menu, ShoppingBag } from "lucide-react";
+import { Menu, ShoppingBag, User } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -10,6 +12,9 @@ const navItems = [
 ];
 
 export default function Navbar() {
+  const { toggle } = useCart();
+  const { user } = useAuth();
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
@@ -45,9 +50,24 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="hidden sm:inline-flex">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden sm:inline-flex"
+            onClick={() => toggle(true)}
+          >
             <ShoppingBag className="mr-2 size-4" />
-            Shop now
+            Cart
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="hidden sm:inline-flex"
+            as={Link}
+            to="/auth"
+          >
+            <User className="mr-2 size-4" />
+            Account
           </Button>
           <Button variant="ghost" size="icon-sm" className="md:hidden">
             <Menu className="size-4" />
