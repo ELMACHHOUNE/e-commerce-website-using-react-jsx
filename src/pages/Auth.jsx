@@ -1,19 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Globe, Eye, EyeOff, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import FileUpload from "@/components/ui/file-upload";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Auth() {
   const { user, login, register, logout, error, clearError } = useAuth();
-  const [mode, setMode] = useState("login");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [mode, setMode] = useState(
+    location.state?.mode === "register" ? "register" : "login",
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
 
   function submit(e) {
     e.preventDefault();
@@ -25,13 +40,20 @@ export default function Auth() {
         alert("Passwords do not match.");
         return;
       }
-      register({ email, password, fullName, phone });
+      const ok = register({ email, password, fullName, phone, avatar });
+      if (ok) {
+        setSuccessMsg("Account created successfully! Please sign in.");
+        setMode("login");
+        setPassword("");
+        setConfirmPassword("");
+      }
     }
   }
 
   function switchMode() {
     setMode(mode === "login" ? "register" : "login");
     clearError();
+    setSuccessMsg("");
   }
 
   const isLogin = mode === "login";
@@ -48,7 +70,7 @@ export default function Auth() {
               alt={isLogin ? "Login" : "Sign Up"}
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 " />
+            <div className="absolute inset-0" />
             <div className="relative z-10 flex h-full flex-col justify-between p-10">
               <div>
                 <div className="text-xs tracking-widest text-white/90">
@@ -87,6 +109,12 @@ export default function Auth() {
                 </div>
               ) : (
                 <form onSubmit={submit} className="mt-6 space-y-4">
+                  {successMsg && (
+                    <div className="rounded-md bg-green-50 p-3 text-sm text-green-700">
+                      {successMsg}
+                    </div>
+                  )}
+
                   {error && (
                     <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
                       {error}
@@ -95,6 +123,16 @@ export default function Auth() {
 
                   {!isLogin && (
                     <>
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                          Profile Image
+                        </label>
+                        <FileUpload
+                          value={avatar}
+                          onChange={setAvatar}
+                        />
+                      </div>
+
                       <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700">
                           Full Name

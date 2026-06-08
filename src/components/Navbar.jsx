@@ -36,16 +36,8 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-sm font-semibold text-white shadow-lg shadow-slate-950/15">
-            M3
-          </span>
-          <div>
-            <p className="text-sm font-semibold tracking-wide text-slate-950">
-              MSC Store
-            </p>
-            <p className="text-xs text-slate-500">Clean commerce layout</p>
-          </div>
+        <Link to="/" className="flex items-center">
+          <img src="/logo.png" alt="MSC Store" className="h-10 w-auto" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -87,10 +79,14 @@ export default function Navbar() {
             <div className="hidden sm:relative sm:flex" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen((v) => !v)}
-                className="flex size-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-colors"
+                className="flex size-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-colors overflow-hidden"
                 title="Account menu"
               >
-                {initial}
+                {user?.avatar ? (
+                  <img src={user.avatar} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  initial
+                )}
               </button>
 
               {menuOpen && (
@@ -132,8 +128,7 @@ export default function Navbar() {
               variant="outline"
               size="sm"
               className="hidden sm:inline-flex"
-              as={Link}
-              to="/auth"
+              onClick={() => navigate("/auth", { state: { mode: "register" } })}
             >
               <UserPlus className="mr-2 size-4" />
               Register

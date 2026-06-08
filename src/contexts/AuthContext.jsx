@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const AuthContext = createContext(null);
 
@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
     setError("");
     if (!email || !password) {
       setError("Email and password are required.");
-      return;
+      return false;
     }
     const users = getStoredUsers();
     const found = users.find(
@@ -43,31 +43,47 @@ export function AuthProvider({ children }) {
     );
     if (!found) {
       setError("Invalid email or password.");
-      return;
+      return false;
     }
     setUser({
       email,
       name: found.fullName || email.split("@")[0],
       fullName: found.fullName || "",
       phone: found.phone || "",
+      avatar: found.avatar || "",
     });
+    return true;
   }
 
-  function register({ email, password, fullName, phone }) {
+  function register({ email, password, fullName, phone, avatar }) {
     setError("");
     if (!email || !password) {
       setError("Email and password are required.");
-      return;
+      return false;
     }
     const users = getStoredUsers();
     if (users.find((u) => u.email === email)) {
       setError("An account with this email already exists.");
-      return;
+      return false;
     }
-    users.push({ email, password, fullName, phone });
+    users.push({ email, password, fullName, phone, avatar: avatar || "" });
     localStorage.setItem("users", JSON.stringify(users));
-    setUser({ email, name: fullName || email.split("@")[0], fullName, phone });
+    return true;
   }
+
+  const updateProfile = useCallback(({ fullName, phone, avatar }) => {
+    setError("");
+    const users = getStoredUsers();
+    const idx = users.findIndex((u) => u.email === user?.email);
+    if (idx === -1) {
+      setError("User not found.");
+      return false;
+    }
+    users[idx] = { ...users[idx], fullName, phone, avatar };
+    localStorage.setItem("users", JSON.stringify(users));
+    setUser((prev) => ({ ...prev, fullName, phone, avatar }));
+    return true;
+  }, [user]);
 
   function logout() {
     setUser(null);
@@ -80,7 +96,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, register, logout, error, clearError }}
+      value={{ user, login, register, updateProfile, logout, error, clearError }}
     >
       {children}
     </AuthContext.Provider>
