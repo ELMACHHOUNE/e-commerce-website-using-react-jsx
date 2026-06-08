@@ -1,0 +1,7 @@
+<svg width="160" height="48" viewBox="0 0 160 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.5" y="0.5" width="47" height="47" rx="14" fill="#FFFFFF" />
+    <path d="M16 30.5L24 13.5L32 30.5H27.8L24 22.1L20.2 30.5H16Z" fill="#0A0A0A" />
+    <path d="M19.6 24.5L24 15.5L28.4 24.5H25.3L24 21.6L22.7 24.5H19.6Z" fill="#0A0A0A" />
+    <text x="58" y="31" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="20"
+        font-weight="700">MSC Store</text>
+</svg>

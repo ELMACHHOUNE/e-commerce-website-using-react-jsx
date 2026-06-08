@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function Products() {
+  const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -20,7 +21,7 @@ export default function Products() {
         setLoading(true);
         setError("");
 
-        const response = await axios.get("https://fakestoreapi.com/products/");
+        const response = await axios.get(`${API_URL}/products`);
 
         if (isMounted) {
           setProducts(response.data);
