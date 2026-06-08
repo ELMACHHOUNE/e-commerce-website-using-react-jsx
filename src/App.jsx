@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
+import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 
@@ -20,6 +22,8 @@ export default function App() {
             <Route path="categories" element={<Categories />} />
             <Route path="auth" element={<Auth />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

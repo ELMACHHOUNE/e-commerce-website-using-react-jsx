@@ -1,5 +1,6 @@
-import { Menu, ShoppingBag, User } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Menu, ShoppingBag, LogOut, LayoutDashboard, Settings, UserPlus } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,7 +14,24 @@ const navItems = [
 
 export default function Navbar() {
   const { toggle } = useCart();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClick(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const { itemCount } = useCart();
+
+  const initial = (user?.fullName || user?.name || user?.email || "U").charAt(0).toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
@@ -53,22 +71,75 @@ export default function Navbar() {
           <Button
             variant="ghost"
             size="sm"
-            className="hidden sm:inline-flex"
+            className="hidden sm:inline-flex relative"
             onClick={() => toggle(true)}
           >
             <ShoppingBag className="mr-2 size-4" />
             Cart
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-medium text-white">
+                {itemCount}
+              </span>
+            )}
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="hidden sm:inline-flex"
-            as={Link}
-            to="/auth"
-          >
-            <User className="mr-2 size-4" />
-            Account
-          </Button>
+
+          {user ? (
+            <div className="hidden sm:relative sm:flex" ref={menuRef}>
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                className="flex size-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-colors"
+                title="Account menu"
+              >
+                {initial}
+              </button>
+
+              {menuOpen && (
+                <div className="absolute right-0 top-12 w-48 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                  <div className="border-b border-slate-100 px-4 py-2">
+                    <p className="text-sm font-medium text-slate-900 truncate">
+                      {user.fullName || user.name || user.email}
+                    </p>
+                    <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={() => { setMenuOpen(false); navigate("/dashboard"); }}
+                    className="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                  >
+                    <LayoutDashboard className="size-4" />
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => { setMenuOpen(false); navigate("/settings"); }}
+                    className="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                  >
+                    <Settings className="size-4" />
+                    Settings
+                  </button>
+                  <div className="border-t border-slate-100 mt-1 pt-1">
+                    <button
+                      onClick={() => { setMenuOpen(false); logout(); navigate("/"); }}
+                      className="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="size-4" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden sm:inline-flex"
+              as={Link}
+              to="/auth"
+            >
+              <UserPlus className="mr-2 size-4" />
+              Register
+            </Button>
+          )}
+
           <Button variant="ghost" size="icon-sm" className="md:hidden">
             <Menu className="size-4" />
           </Button>

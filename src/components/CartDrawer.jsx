@@ -1,10 +1,15 @@
-import { X, Trash } from "lucide-react";
+import { X, Trash, Plus, Minus, ShoppingBag, CreditCard } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
 
 export default function CartDrawer() {
-  const { items, isOpen, toggle, removeItem, clear } = useCart();
+  const { items, isOpen, toggle, removeItem, updateQty, clear, itemCount } =
+    useCart();
+  const navigate = useNavigate();
+
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
   return (
     <>
@@ -24,7 +29,15 @@ export default function CartDrawer() {
       >
         <div className="flex h-full flex-col">
           <div className="flex items-center justify-between border-b p-4">
-            <h3 className="text-lg font-medium">Your cart</h3>
+            <h3 className="text-lg font-medium flex items-center gap-2">
+              <ShoppingBag className="size-5" />
+              Your cart
+              {itemCount > 0 && (
+                <span className="inline-flex size-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-medium text-white">
+                  {itemCount}
+                </span>
+              )}
+            </h3>
             <div className="flex gap-2">
               <Button variant="ghost" size="icon-sm" onClick={() => clear()}>
                 <Trash className="size-4" />
@@ -41,7 +54,10 @@ export default function CartDrawer() {
 
           <div className="flex-1 overflow-y-auto p-4">
             {items.length === 0 ? (
-              <Card className="p-6 text-slate-600">No items in cart.</Card>
+              <Card className="p-6 text-center text-slate-600">
+                <ShoppingBag className="mx-auto size-8 mb-2 text-slate-300" />
+                No items in cart.
+              </Card>
             ) : (
               <ul className="space-y-3">
                 {items.map((it) => (
@@ -49,24 +65,46 @@ export default function CartDrawer() {
                     <img
                       src={it.image}
                       alt={it.title}
-                      className="h-12 w-12 rounded"
+                      className="h-16 w-16 rounded object-cover"
                     />
-                    <div className="flex-1">
-                      <div className="font-medium text-slate-900">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-slate-900 truncate">
                         {it.title}
                       </div>
                       <div className="text-sm text-slate-600">
-                        Qty: {it.qty}
+                        ${it.price} each
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon-sm"
+                          onClick={() => updateQty(it.id, -1)}
+                          disabled={it.qty <= 1}
+                        >
+                          <Minus className="size-3" />
+                        </Button>
+                        <span className="w-6 text-center text-sm font-medium">
+                          {it.qty}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon-sm"
+                          onClick={() => updateQty(it.id, 1)}
+                        >
+                          <Plus className="size-3" />
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end">
-                      <div className="font-medium">${it.price}</div>
+                    <div className="flex flex-col items-end gap-1">
+                      <div className="font-medium">
+                        ${(it.price * it.qty).toFixed(2)}
+                      </div>
                       <Button
                         variant="ghost"
                         size="icon-sm"
                         onClick={() => removeItem(it.id)}
                       >
-                        <Trash className="size-4" />
+                        <Trash className="size-4 text-red-500" />
                       </Button>
                     </div>
                   </li>
@@ -75,31 +113,30 @@ export default function CartDrawer() {
             )}
           </div>
 
-          <div className="border-t p-4">
-            <div className="mb-3 flex items-center justify-between">
+          <div className="border-t p-4 space-y-3">
+            <div className="flex items-center justify-between">
               <div className="text-sm text-slate-600">Total</div>
-              <div className="font-medium">
-                ${items.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2)}
-              </div>
+              <div className="font-medium text-lg">${total.toFixed(2)}</div>
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => toggle(false)}
-              >
-                Continue shopping
-              </Button>
-              <Button
-                className="w-full"
-                onClick={() => {
-                  toggle(false);
-                  window.location.href = "/checkout";
-                }}
-              >
-                Checkout
-              </Button>
-            </div>
+            <Button
+              className="w-full bg-slate-900 text-white hover:bg-slate-800"
+              size="lg"
+              disabled={items.length === 0}
+              onClick={() => {
+                toggle(false);
+                navigate("/checkout");
+              }}
+            >
+              <CreditCard className="mr-2 size-4" />
+              Proceed to Checkout
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => toggle(false)}
+            >
+              Continue shopping
+            </Button>
           </div>
         </div>
       </div>

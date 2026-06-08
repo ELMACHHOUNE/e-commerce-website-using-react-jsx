@@ -1,10 +1,23 @@
-import { createContext, useContext, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext(null);
 
+function getStoredCart() {
+  try {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+  } catch {
+    return [];
+  }
+}
+
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(getStoredCart);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(items));
+  }, [items]);
 
   function addItem(product) {
     setItems((prev) => {
@@ -22,6 +35,16 @@ export function CartProvider({ children }) {
     setItems((prev) => prev.filter((p) => p.id !== id));
   }
 
+  function updateQty(id, delta) {
+    setItems((prev) =>
+      prev
+        .map((p) =>
+          p.id === id ? { ...p, qty: Math.max(1, p.qty + delta) } : p,
+        )
+        .filter((p) => p.qty > 0),
+    );
+  }
+
   function clear() {
     setItems([]);
   }
@@ -30,9 +53,20 @@ export function CartProvider({ children }) {
     setIsOpen((v) => (typeof open === "boolean" ? open : !v));
   }
 
+  const itemCount = items.reduce((s, i) => s + i.qty, 0);
+
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, clear, isOpen, toggle }}
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQty,
+        clear,
+        isOpen,
+        toggle,
+        itemCount,
+      }}
     >
       {children}
     </CartContext.Provider>
@@ -42,5 +76,3 @@ export function CartProvider({ children }) {
 export function useCart() {
   return useContext(CartContext);
 }
-
-export default CartContext;
