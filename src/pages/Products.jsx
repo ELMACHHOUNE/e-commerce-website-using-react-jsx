@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
+import Loader from "@/components/Loader";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -63,10 +64,7 @@ export default function Products() {
       </div>
 
       {loading ? (
-        <Card className="flex items-center justify-center gap-3 border-slate-200 bg-white p-10 text-slate-600">
-          <Loader2 className="size-5 animate-spin" />
-          Loading products...
-        </Card>
+        <Loader loading={loading} fullScreen={false} />
       ) : error ? (
         <Card className="border-red-200 bg-red-50 p-6 text-red-700">
           <div className="flex items-start gap-3">
