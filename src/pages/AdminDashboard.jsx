@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/table";
 import { Modal } from "@/components/ui/modal";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Pagination } from "@/components/ui/pagination";
+import { SearchInput } from "@/components/ui/search-input";
 import { useAuth } from "@/contexts/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
@@ -189,6 +191,25 @@ export default function AdminDashboard() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [deletingType, setDeletingType] = useState(null);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
+  const filtered = (activeTab === "products" ? products : activeTab === "users" ? users : categories)
+    .filter((item) => {
+      if (!search) return true;
+      const q = search.toLowerCase();
+      if (activeTab === "products") return item.title?.toLowerCase().includes(q) || item.category?.toLowerCase().includes(q);
+      if (activeTab === "users") {
+        const name = item.name?.firstname ? `${item.name.firstname} ${item.name.lastname}` : item.fullName || "";
+        return name.toLowerCase().includes(q) || item.email?.toLowerCase().includes(q);
+      }
+      return item.name?.toLowerCase().includes(q);
+    });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   function showToast(message, type = "success") {
     setToast({ message, type, key: Date.now() });
@@ -338,7 +359,7 @@ export default function AdminDashboard() {
             return (
               <button
                 key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setModalOpen(false); setEditingItem(null); }}
+                onClick={() => { setActiveTab(tab.id); setModalOpen(false); setEditingItem(null); setSearch(""); setPage(1); }}
                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   activeTab === tab.id
                     ? "bg-slate-950 text-white"
@@ -370,6 +391,14 @@ export default function AdminDashboard() {
             {error}
           </div>
         )}
+
+        <div className="mb-4">
+          <SearchInput
+            value={search}
+            onChange={(v) => { setSearch(v); setPage(1); }}
+            placeholder={`Search ${activeTab}...`}
+          />
+        </div>
 
         <Card className="overflow-hidden">
           <Table>
@@ -407,8 +436,14 @@ export default function AdminDashboard() {
                     Loading {activeTab}...
                   </TableCell>
                 </TableRow>
+              ) : paginated.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
+                    No {activeTab} found.
+                  </TableCell>
+                </TableRow>
               ) : activeTab === "products" ? (
-                products.map((product) => (
+                paginated.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="font-mono text-xs text-slate-500">{product.id}</TableCell>
                     <TableCell className="max-w-56">
@@ -436,7 +471,7 @@ export default function AdminDashboard() {
                   </TableRow>
                 ))
               ) : activeTab === "users" ? (
-                users.map((u) => (
+                paginated.map((u) => (
                   <TableRow key={u.id}>
                     <TableCell className="font-mono text-xs text-slate-500">{u.id}</TableCell>
                     <TableCell className="font-medium">
@@ -466,7 +501,7 @@ export default function AdminDashboard() {
                   </TableRow>
                 ))
               ) : (
-                categories.map((cat) => (
+                paginated.map((cat) => (
                   <TableRow key={cat.name}>
                     <TableCell className="font-medium capitalize">{cat.name}</TableCell>
                     <TableCell className="text-right">
@@ -487,6 +522,16 @@ export default function AdminDashboard() {
             </TableBody>
           </Table>
         </Card>
+
+        {filtered.length > 0 && (
+          <Pagination
+            currentPage={safePage}
+            totalPages={totalPages}
+            totalItems={filtered.length}
+            pageSize={pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       <Modal open={modalOpen} onClose={closeModal} title={modalTitle}>
