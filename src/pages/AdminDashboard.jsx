@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
+  BarChart3,
   Package,
   Users,
   Tags,
@@ -10,7 +11,32 @@ import {
   Trash2,
   AlertCircle,
   CheckCircle2,
+  FileSpreadsheet,
+  FileText,
+  DollarSign,
+  ShoppingBag,
+  TrendingUp,
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+} from "recharts";
+import ExcelJS from "exceljs";
+import pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { saveAs } from "file-saver";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -28,13 +54,68 @@ import { Pagination } from "@/components/ui/pagination";
 import { SearchInput } from "@/components/ui/search-input";
 import { useAuth } from "@/contexts/AuthContext";
 
+pdfMake.vfs = pdfFonts;
+
 const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const tabs = [
+  { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "products", label: "Products", icon: Package },
   { id: "users", label: "Users", icon: Users },
   { id: "categories", label: "Categories", icon: Tags },
 ];
+
+const CHART_COLORS = ["#0f172a", "#334155", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0"];
+const PIE_COLORS = ["#0f172a", "#94a3b8"];
+
+/* ---------- Export helpers ---------- */
+
+async function exportExcel(data, headers, filename) {
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet(filename);
+  const headerRow = ws.addRow(headers.map((h) => h.label));
+  headerRow.font = { bold: true, size: 12, color: { argb: "FFFFFFFF" } };
+  headerRow.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF0F172A" } };
+  headerRow.alignment = { horizontal: "center", vertical: "middle" };
+  headerRow.height = 28;
+  data.forEach((row) => {
+    const r = ws.addRow(headers.map((h) => row[h.key] ?? ""));
+    r.alignment = { horizontal: "center", vertical: "middle" };
+  });
+  ws.columns.forEach((col) => { col.width = 28; });
+  const buf = await wb.xlsx.writeBuffer();
+  saveAs(new Blob([buf]), `${filename}.xlsx`);
+}
+
+function exportPDF(data, headers, title) {
+  const docDef = {
+    pageSize: "A4",
+    pageMargins: [20, 30, 20, 30],
+    content: [
+      { text: title, style: "header", margin: [0, 0, 0, 12] },
+      {
+        table: {
+          headerRows: 1,
+          widths: headers.map(() => "*"),
+          body: [
+            headers.map((h) => ({ text: h.label, style: "tableHeader" })),
+            ...data.map((row) => headers.map((h) => ({ text: String(row[h.key] ?? ""), style: "cell" }))),
+          ],
+        },
+        layout: "lightHorizontalLines",
+      },
+    ],
+    styles: {
+      header: { fontSize: 18, bold: true, color: "#0f172a" },
+      tableHeader: { bold: true, fontSize: 11, fillColor: "#0f172a", color: "#ffffff", margin: [5, 5], alignment: "center" },
+      cell: { fontSize: 10, margin: [5, 3], alignment: "center" },
+    },
+    defaultStyle: { font: "Roboto" },
+  };
+  pdfMake.createPdf(docDef).download(`${title}.pdf`);
+}
+
+/* ---------- Toast ---------- */
 
 function Toast({ message, type = "success", onClose }) {
   useEffect(() => {
@@ -55,15 +136,146 @@ function Toast({ message, type = "success", onClose }) {
   );
 }
 
+/* ---------- Summary card ---------- */
+
+function SummaryCard({ icon: Icon, label, value, sub }) {
+  return (
+    <Card className="flex items-center gap-4 p-5">
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-slate-100">
+        <Icon className="size-5 text-slate-700" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-sm text-slate-500">{label}</p>
+        <p className="text-2xl font-semibold text-slate-950">{value}</p>
+        {sub && <p className="text-xs text-slate-400">{sub}</p>}
+      </div>
+    </Card>
+  );
+}
+
+/* ---------- Charts ---------- */
+
+function ProductsBarChart({ data }) {
+  if (!data.length) return null;
+  return (
+    <Card className="p-5">
+      <h3 className="mb-1 text-sm font-medium text-slate-700">Products per Category</h3>
+      <p className="mb-4 text-xs text-slate-400">Distribution across all product categories</p>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
+              cursor={{ fill: "#f1f5f9" }}
+            />
+            <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={48}>
+              {data.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+}
+
+function UsersPieChart({ adminCount, userCount }) {
+  const data = [
+    { name: "Admin", value: adminCount },
+    { name: "User", value: userCount },
+  ];
+  if (!adminCount && !userCount) return null;
+  return (
+    <Card className="p-5">
+      <h3 className="mb-1 text-sm font-medium text-slate-700">User Roles</h3>
+      <p className="mb-4 text-xs text-slate-400">Admin vs regular user distribution</p>
+      <div className="flex items-center justify-center h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie data={data} cx="50%" cy="50%" innerRadius={56} outerRadius={80} paddingAngle={4} dataKey="value">
+              {data.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
+            </Pie>
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="absolute flex flex-col items-center">
+          <span className="text-2xl font-semibold text-slate-950">{adminCount + userCount}</span>
+          <span className="text-xs text-slate-400">total</span>
+        </div>
+      </div>
+      <div className="flex justify-center gap-6 text-xs">
+        <div className="flex items-center gap-1.5">
+          <span className="size-2.5 rounded-full" style={{ backgroundColor: PIE_COLORS[0] }} />
+          Admin ({adminCount})
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="size-2.5 rounded-full" style={{ backgroundColor: PIE_COLORS[1] }} />
+          User ({userCount})
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function PriceRangeChart({ data }) {
+  if (!data.length) return null;
+  return (
+    <Card className="p-5">
+      <h3 className="mb-1 text-sm font-medium text-slate-700">Price Range Overview</h3>
+      <p className="mb-4 text-xs text-slate-400">Product prices sorted ascending</p>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="label" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
+            />
+            <Line type="monotone" dataKey="price" stroke="#0f172a" strokeWidth={2} dot={{ r: 3, fill: "#0f172a" }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+}
+
+function CategoryAreaChart({ data }) {
+  if (!data.length) return null;
+  return (
+    <Card className="p-5">
+      <h3 className="mb-1 text-sm font-medium text-slate-700">Category Distribution</h3>
+      <p className="mb-4 text-xs text-slate-400">Cumulative product count by category</p>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
+            />
+            <Area type="monotone" dataKey="count" stroke="#334155" fill="#94a3b8" fillOpacity={0.3} strokeWidth={2} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+}
+
+/* ---------- Forms ---------- */
+
 function ProductForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(
     initial || { title: "", price: "", description: "", category: "", image: "" }
   );
-
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
-
   return (
     <div className="space-y-4">
       <div>
@@ -107,11 +319,9 @@ function UserForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(
     initial || { email: "", password: "", fullName: "", phone: "", role: "user" }
   );
-
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
-
   return (
     <div className="space-y-4">
       <div>
@@ -158,7 +368,6 @@ function UserForm({ initial, onSave, onCancel }) {
 
 function CategoryForm({ initial, onSave, onCancel }) {
   const [name, setName] = useState(initial?.name || "");
-
   return (
     <div className="space-y-4">
       <div>
@@ -176,10 +385,12 @@ function CategoryForm({ initial, onSave, onCancel }) {
   );
 }
 
+/* ---------- Main component ---------- */
+
 export default function AdminDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("products");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -195,30 +406,12 @@ export default function AdminDashboard() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
-  const filtered = (activeTab === "products" ? products : activeTab === "users" ? users : categories)
-    .filter((item) => {
-      if (!search) return true;
-      const q = search.toLowerCase();
-      if (activeTab === "products") return item.title?.toLowerCase().includes(q) || item.category?.toLowerCase().includes(q);
-      if (activeTab === "users") {
-        const name = item.name?.firstname ? `${item.name.firstname} ${item.name.lastname}` : item.fullName || "";
-        return name.toLowerCase().includes(q) || item.email?.toLowerCase().includes(q);
-      }
-      return item.name?.toLowerCase().includes(q);
-    });
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const safePage = Math.min(page, totalPages);
-  const paginated = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
-
-  function showToast(message, type = "success") {
-    setToast({ message, type, key: Date.now() });
-  }
-
   if (!user || user.role !== "admin") {
     navigate("/", { replace: true });
     return null;
   }
+
+  /* ---------- Data fetching ---------- */
 
   async function fetchProducts() {
     try { setLoading(true); setError("");
@@ -245,10 +438,55 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    if (activeTab === "products") fetchProducts();
-    else if (activeTab === "users") fetchUsers();
-    else fetchCategories();
-  }, [activeTab]);
+    fetchProducts();
+    fetchUsers();
+    fetchCategories();
+  }, []);
+
+  function showToast(message, type = "success") {
+    setToast({ message, type, key: Date.now() });
+  }
+
+  /* ---------- Derived data ---------- */
+
+  const categoryCounts = useMemo(() => {
+    const map = {};
+    products.forEach((p) => {
+      const c = p.category || "uncategorized";
+      map[c] = (map[c] || 0) + 1;
+    });
+    return Object.entries(map).map(([name, count]) => ({ name, count }));
+  }, [products]);
+
+  const priceData = useMemo(() => {
+    return [...products]
+      .sort((a, b) => a.price - b.price)
+      .slice(0, 20)
+      .map((p, i) => ({ label: `#${i + 1}`, price: p.price }));
+  }, [products]);
+
+  const adminCount = users.filter((u) => u.role === "admin").length;
+  const userCount = users.length - adminCount;
+
+  /* ---------- Search & pagination ---------- */
+
+  const filtered = (activeTab === "products" ? products : activeTab === "users" ? users : categories)
+    .filter((item) => {
+      if (!search) return true;
+      const q = search.toLowerCase();
+      if (activeTab === "products") return item.title?.toLowerCase().includes(q) || item.category?.toLowerCase().includes(q);
+      if (activeTab === "users") {
+        const name = item.name?.firstname ? `${item.name.firstname} ${item.name.lastname}` : item.fullName || "";
+        return name.toLowerCase().includes(q) || item.email?.toLowerCase().includes(q);
+      }
+      return item.name?.toLowerCase().includes(q);
+    });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+
+  /* ---------- CRUD ---------- */
 
   function confirmDelete(id, type) {
     setDeletingId(id);
@@ -331,24 +569,78 @@ export default function AdminDashboard() {
     setEditingItem(null);
   }
 
-  function openAddForm() {
-    setEditingItem(null);
-    setModalOpen(true);
+  function openAddForm() { setEditingItem(null); setModalOpen(true); }
+  function openEditForm(item) { setEditingItem(item); setModalOpen(true); }
+  function closeModal() { setModalOpen(false); setEditingItem(null); }
+
+  /* ---------- Export ---------- */
+
+  const productHeaders = [
+    { key: "id", label: "ID" },
+    { key: "title", label: "Title" },
+    { key: "price", label: "Price" },
+    { key: "category", label: "Category" },
+  ];
+  const userHeaders = [
+    { key: "id", label: "ID" },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone" },
+    { key: "role", label: "Role" },
+  ];
+  const categoryHeaders = [
+    { key: "name", label: "Name" },
+    { key: "productCount", label: "Product Count" },
+  ];
+
+  function getProductData() {
+    return products.map((p) => ({ id: p.id, title: p.title, price: `$${p.price?.toFixed(2)}`, category: p.category }));
+  }
+  function getUserData() {
+    return users.map((u) => ({
+      id: u.id,
+      name: u.name?.firstname ? `${u.name.firstname} ${u.name.lastname}` : u.fullName || "—",
+      email: u.email,
+      phone: u.phone || "—",
+      role: u.role || "user",
+    }));
+  }
+  function getCategoryData() {
+    return categories.map((c) => ({
+      name: c.name,
+      productCount: categoryCounts.find((cc) => cc.name === c.name)?.count || 0,
+    }));
   }
 
-  function openEditForm(item) {
-    setEditingItem(item);
-    setModalOpen(true);
-  }
-
-  function closeModal() {
-    setModalOpen(false);
-    setEditingItem(null);
-  }
+  /* ---------- Render ---------- */
 
   const modalTitle = editingItem
     ? `Edit ${activeTab === "products" ? "Product" : activeTab === "users" ? "User" : "Category"}`
     : `Add ${activeTab === "products" ? "Product" : activeTab === "users" ? "User" : "Category"}`;
+
+  function renderManagementHeader({ onExcel, onPdf }) {
+    return (
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold text-slate-950 capitalize">
+          {activeTab} Management
+        </h1>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={onExcel}>
+            <FileSpreadsheet className="mr-1.5 size-3.5" />
+            Excel
+          </Button>
+          <Button variant="outline" size="sm" onClick={onPdf}>
+            <FileText className="mr-1.5 size-3.5" />
+            PDF
+          </Button>
+          <Button onClick={openAddForm} className="bg-slate-900 text-white hover:bg-slate-800">
+            <Plus className="mr-1.5 size-4" />
+            Add {activeTab === "products" ? "Product" : activeTab === "users" ? "User" : "Category"}
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-6">
@@ -375,162 +667,192 @@ export default function AdminDashboard() {
       </aside>
 
       <div className="flex-1 min-w-0">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-slate-950 capitalize">
-            {activeTab} Management
-          </h1>
-          <Button onClick={openAddForm} className="bg-slate-900 text-white hover:bg-slate-800">
-            <Plus className="mr-1.5 size-4" />
-            Add {activeTab === "products" ? "Product" : activeTab === "users" ? "User" : "Category"}
-          </Button>
-        </div>
+        {activeTab === "dashboard" ? (
+          <>
+            <h1 className="mb-6 text-2xl font-semibold text-slate-950">Dashboard Overview</h1>
 
-        {error && (
-          <div className="mb-4 flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600">
-            <AlertCircle className="size-4 shrink-0" />
-            {error}
-          </div>
-        )}
+            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <SummaryCard icon={ShoppingBag} label="Total Products" value={products.length} sub="In catalog" />
+              <SummaryCard icon={Users} label="Total Users" value={users.length} sub={`${adminCount} admin · ${userCount} users`} />
+              <SummaryCard icon={Tags} label="Categories" value={categories.length} sub="Product categories" />
+              <SummaryCard
+                icon={DollarSign}
+                label="Avg. Price"
+                value={products.length ? `$${(products.reduce((s, p) => s + p.price, 0) / products.length).toFixed(2)}` : "$0"}
+                sub={`From $${Math.min(...products.map((p) => p.price)).toFixed(2)}`}
+              />
+            </div>
 
-        <div className="mb-4">
-          <SearchInput
-            value={search}
-            onChange={(v) => { setSearch(v); setPage(1); }}
-            placeholder={`Search ${activeTab}...`}
-          />
-        </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <ProductsBarChart data={categoryCounts} />
+              <UsersPieChart adminCount={adminCount} userCount={userCount} />
+              <PriceRangeChart data={priceData} />
+              <CategoryAreaChart data={categoryCounts} />
+            </div>
+          </>
+        ) : (
+          <>
+            {error && (
+              <div className="mb-4 flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600">
+                <AlertCircle className="size-4 shrink-0" />
+                {error}
+              </div>
+            )}
 
-        <Card className="overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {activeTab === "products" ? (
-                  <>
-                    <TableHead className="w-12">ID</TableHead>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="w-24 text-right">Actions</TableHead>
-                  </>
-                ) : activeTab === "users" ? (
-                  <>
-                    <TableHead className="w-12">ID</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead className="w-24 text-right">Actions</TableHead>
-                  </>
-                ) : (
-                  <>
-                    <TableHead>Name</TableHead>
-                    <TableHead className="w-24 text-right">Actions</TableHead>
-                  </>
-                )}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
-                    Loading {activeTab}...
-                  </TableCell>
-                </TableRow>
-              ) : paginated.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
-                    No {activeTab} found.
-                  </TableCell>
-                </TableRow>
-              ) : activeTab === "products" ? (
-                paginated.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell className="font-mono text-xs text-slate-500">{product.id}</TableCell>
-                    <TableCell className="max-w-56">
-                      <div className="flex items-center gap-3">
-                        {product.image && (
-                          <img src={product.image} alt="" className="size-8 rounded object-cover bg-slate-100" />
-                        )}
-                        <span className="truncate font-medium">{product.title}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>${product.price?.toFixed(2)}</TableCell>
-                    <TableCell className="text-slate-600 capitalize">{product.category}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button onClick={() => openEditForm(product)}
-                          className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
-                          <Pencil className="size-3.5" />
-                        </button>
-                        <button onClick={() => confirmDelete(product.id, "product")}
-                          className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </div>
-                    </TableCell>
+            {activeTab === "products" && renderManagementHeader({
+              onExcel: () => exportExcel(getProductData(), productHeaders, "Products"),
+              onPdf: () => exportPDF(getProductData(), productHeaders, "Products"),
+            })}
+            {activeTab === "users" && renderManagementHeader({
+              onExcel: () => exportExcel(getUserData(), userHeaders, "Users"),
+              onPdf: () => exportPDF(getUserData(), userHeaders, "Users"),
+            })}
+            {activeTab === "categories" && renderManagementHeader({
+              onExcel: () => exportExcel(getCategoryData(), categoryHeaders, "Categories"),
+              onPdf: () => exportPDF(getCategoryData(), categoryHeaders, "Categories"),
+            })}
+
+            <div className="mb-4">
+              <SearchInput
+                value={search}
+                onChange={(v) => { setSearch(v); setPage(1); }}
+                placeholder={`Search ${activeTab}...`}
+              />
+            </div>
+
+            <Card className="overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {activeTab === "products" ? (
+                      <>
+                        <TableHead className="w-12">ID</TableHead>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead className="w-24 text-right">Actions</TableHead>
+                      </>
+                    ) : activeTab === "users" ? (
+                      <>
+                        <TableHead className="w-12">ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Phone</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead className="w-24 text-right">Actions</TableHead>
+                      </>
+                    ) : (
+                      <>
+                        <TableHead>Name</TableHead>
+                        <TableHead className="w-24 text-right">Actions</TableHead>
+                      </>
+                    )}
                   </TableRow>
-                ))
-              ) : activeTab === "users" ? (
-                paginated.map((u) => (
-                  <TableRow key={u.id}>
-                    <TableCell className="font-mono text-xs text-slate-500">{u.id}</TableCell>
-                    <TableCell className="font-medium">
-                      {u.name?.firstname ? `${u.name.firstname} ${u.name.lastname}` : u.fullName || "—"}
-                    </TableCell>
-                    <TableCell className="text-slate-600">{u.email}</TableCell>
-                    <TableCell className="text-slate-600">{u.phone || "—"}</TableCell>
-                    <TableCell>
-                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        u.role === "admin" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600"
-                      }`}>
-                        {u.role || "user"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button onClick={() => openEditForm(u)}
-                          className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
-                          <Pencil className="size-3.5" />
-                        </button>
-                        <button onClick={() => confirmDelete(u.id, "user")}
-                          className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                paginated.map((cat) => (
-                  <TableRow key={cat.name}>
-                    <TableCell className="font-medium capitalize">{cat.name}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button onClick={() => openEditForm(cat)}
-                          className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
-                          <Pencil className="size-3.5" />
-                        </button>
-                        <button onClick={() => confirmDelete(cat.name, "category")}
-                          className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </Card>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
+                        Loading {activeTab}...
+                      </TableCell>
+                    </TableRow>
+                  ) : paginated.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
+                        No {activeTab} found.
+                      </TableCell>
+                    </TableRow>
+                  ) : activeTab === "products" ? (
+                    paginated.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell className="font-mono text-xs text-slate-500">{product.id}</TableCell>
+                        <TableCell className="max-w-56">
+                          <div className="flex items-center gap-3">
+                            {product.image && (
+                              <img src={product.image} alt="" className="size-8 rounded object-cover bg-slate-100" />
+                            )}
+                            <span className="truncate font-medium">{product.title}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>${product.price?.toFixed(2)}</TableCell>
+                        <TableCell className="text-slate-600 capitalize">{product.category}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <button onClick={() => openEditForm(product)}
+                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
+                              <Pencil className="size-3.5" />
+                            </button>
+                            <button onClick={() => confirmDelete(product.id, "product")}
+                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
+                              <Trash2 className="size-3.5" />
+                            </button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : activeTab === "users" ? (
+                    paginated.map((u) => (
+                      <TableRow key={u.id}>
+                        <TableCell className="font-mono text-xs text-slate-500">{u.id}</TableCell>
+                        <TableCell className="font-medium">
+                          {u.name?.firstname ? `${u.name.firstname} ${u.name.lastname}` : u.fullName || "—"}
+                        </TableCell>
+                        <TableCell className="text-slate-600">{u.email}</TableCell>
+                        <TableCell className="text-slate-600">{u.phone || "—"}</TableCell>
+                        <TableCell>
+                          <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            u.role === "admin" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600"
+                          }`}>
+                            {u.role || "user"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <button onClick={() => openEditForm(u)}
+                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
+                              <Pencil className="size-3.5" />
+                            </button>
+                            <button onClick={() => confirmDelete(u.id, "user")}
+                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
+                              <Trash2 className="size-3.5" />
+                            </button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    paginated.map((cat) => (
+                      <TableRow key={cat.name}>
+                        <TableCell className="font-medium capitalize">{cat.name}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <button onClick={() => openEditForm(cat)}
+                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
+                              <Pencil className="size-3.5" />
+                            </button>
+                            <button onClick={() => confirmDelete(cat.name, "category")}
+                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
+                              <Trash2 className="size-3.5" />
+                            </button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </Card>
 
-        {filtered.length > 0 && (
-          <Pagination
-            currentPage={safePage}
-            totalPages={totalPages}
-            totalItems={filtered.length}
-            pageSize={pageSize}
-            onPageChange={setPage}
-          />
+            {filtered.length > 0 && (
+              <Pagination
+                currentPage={safePage}
+                totalPages={totalPages}
+                totalItems={filtered.length}
+                pageSize={pageSize}
+                onPageChange={setPage}
+              />
+            )}
+          </>
         )}
       </div>
 
