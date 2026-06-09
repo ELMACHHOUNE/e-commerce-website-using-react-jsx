@@ -3,8 +3,8 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 
 const AuthContext = createContext(null);
 
-const ADMIN_EMAIL = "admin@admin.com";
-const ADMIN_PASSWORD = "admin123";
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "admin@admin.com";
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
 
 function getStoredUsers() {
   try {

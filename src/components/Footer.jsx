@@ -27,6 +27,8 @@ const pageLinks = [
   { to: "/", label: "Home" },
   { to: "/products", label: "All Products" },
   { to: "/categories", label: "Categories" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
   { to: "/auth", label: "Account" },
 ];
 

@@ -10,6 +10,8 @@ const navItems = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
   { to: "/categories", label: "Categories" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {

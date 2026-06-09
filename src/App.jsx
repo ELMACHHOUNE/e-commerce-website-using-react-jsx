@@ -7,6 +7,8 @@ import Products from "./pages/Products";
 import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/AdminDashboard";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
@@ -20,6 +22,8 @@ export default function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="about" element={<About />} />
             <Route path="products" element={<Products />} />
             <Route path="categories" element={<Categories />} />
             <Route path="auth" element={<Auth />} />
