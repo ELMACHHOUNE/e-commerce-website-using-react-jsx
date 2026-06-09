@@ -86,10 +86,6 @@ export default function Auth() {
           <div className="flex items-center justify-center h-full min-h-0 py-4">
             <Card className="w-full max-w-md p-8 max-h-full overflow-y-auto">
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center gap-2">
-                  <Globe className="size-6 text-slate-900" />
-                  <span className="text-lg font-semibold">MSc</span>
-                </div>
                 <h1 className="mt-6 font-serif text-3xl">
                   {isLogin ? "Welcome Back" : "Create Account"}
                 </h1>
@@ -108,7 +104,7 @@ export default function Auth() {
                   <Button onClick={() => logout()}>Sign out</Button>
                 </div>
               ) : (
-                <form onSubmit={submit} className="mt-6 space-y-4">
+                <form onSubmit={submit} className="mt-3 space-y-4">
                   {successMsg && (
                     <div className="rounded-md bg-green-50 p-3 text-sm text-green-700">
                       {successMsg}
