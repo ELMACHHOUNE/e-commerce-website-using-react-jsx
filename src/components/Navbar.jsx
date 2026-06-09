@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, ShoppingBag, LogOut, LayoutDashboard, Settings, UserPlus } from "lucide-react";
+import { Menu, ShoppingBag, LogOut, LayoutDashboard, Settings, Shield, UserPlus } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -104,6 +104,15 @@ export default function Navbar() {
                     <LayoutDashboard className="size-4" />
                     Dashboard
                   </button>
+                  {user.role === "admin" && (
+                    <button
+                      onClick={() => { setMenuOpen(false); navigate("/admin"); }}
+                      className="flex w-full items-center gap-3 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    >
+                      <Shield className="size-4" />
+                      Dashboard Admin
+                    </button>
+                  )}
                   <button
                     onClick={() => { setMenuOpen(false); navigate("/settings"); }}
                     className="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"

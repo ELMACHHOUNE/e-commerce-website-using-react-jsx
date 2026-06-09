@@ -3,9 +3,25 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 
 const AuthContext = createContext(null);
 
+const ADMIN_EMAIL = "admin@admin.com";
+const ADMIN_PASSWORD = "admin123";
+
 function getStoredUsers() {
   try {
-    return JSON.parse(localStorage.getItem("users")) || [];
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const hasAdmin = users.some((u) => u.email === ADMIN_EMAIL);
+    if (!hasAdmin) {
+      users.push({
+        email: ADMIN_EMAIL,
+        password: ADMIN_PASSWORD,
+        fullName: "Admin",
+        phone: "",
+        avatar: "",
+        role: "admin",
+      });
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    return users;
   } catch {
     return [];
   }
@@ -51,6 +67,7 @@ export function AuthProvider({ children }) {
       fullName: found.fullName || "",
       phone: found.phone || "",
       avatar: found.avatar || "",
+      role: found.role || "user",
     });
     return true;
   }
@@ -66,7 +83,7 @@ export function AuthProvider({ children }) {
       setError("An account with this email already exists.");
       return false;
     }
-    users.push({ email, password, fullName, phone, avatar: avatar || "" });
+    users.push({ email, password, fullName, phone, avatar: avatar || "", role: "user" });
     localStorage.setItem("users", JSON.stringify(users));
     return true;
   }
