@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Layout from "./components/Layout";
 import Categories from "./pages/Categories";
@@ -7,6 +7,7 @@ import Products from "./pages/Products";
 import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
@@ -25,7 +26,7 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="settings" element={<Settings />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </CartProvider>
     </AuthProvider>
