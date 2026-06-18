@@ -30,7 +30,7 @@ export function SearchInput({ value, onChange, placeholder = "Search..." }) {
         value={local}
         onChange={handleChange}
         placeholder={placeholder}
-        className="h-9 w-64 rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-8 text-sm outline-none transition-colors focus:border-slate-300 focus:ring-2 focus:ring-slate-200/50"
+        className="h-9 w-64 rounded-lg border border-slate-200 dark:bg-slate-950 pl-9 pr-8   text-sm outline-none transition-colors focus:border-slate-300 focus:ring-2 focus:ring-slate-200/50"
       />
       {local && (
         <button

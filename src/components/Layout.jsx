@@ -9,7 +9,7 @@ export default function Layout() {
     <div className="relative flex min-h-screen flex-col bg-white dark:bg-slate-950 transition-colors">
       {/* Grid background with radial fade mask */}
       <div
-        className="pointer-events-none fixed inset-0 z-0 bg-[length:32px_32px] dark:bg-[length:32px_32px]"
+        className="pointer-events-none fixed opacity-30 dark:opacity-4 inset-0 z-0 bg-[length:32px_32px] dark:bg-[length:32px_32px]"
         style={{
           backgroundImage:
             "linear-gradient(to right, #d1d5db 1px, transparent 1px), linear-gradient(to bottom, #d1d5db 1px, transparent 1px)",

@@ -43,7 +43,7 @@ export function Pagination({ currentPage, totalPages, onPageChange, totalItems, 
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium dark:hover:text-slate-900 text-slate-600 dark:text-slate-300 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="size-4" />
           Previous
@@ -71,7 +71,7 @@ export function Pagination({ currentPage, totalPages, onPageChange, totalItems, 
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium text-slate-600 dark:hover:text-slate-900 dark:text-slate-300 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
         >
           Next
           <ChevronRight className="size-4" />
