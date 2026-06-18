@@ -21,6 +21,7 @@ export default function Products() {
   const pageSize = 8;
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [showAll, setShowAll] = useState(false);
 
   const filtered = products.filter((p) => {
     if (search) {
@@ -144,19 +145,19 @@ export default function Products() {
         </Card>
       ) : (
         <>
-          {paginated.length === 0 ? (
+          {(showAll ? filtered : paginated).length === 0 ? (
             <Card className="flex items-center justify-center border-slate-200 bg-white p-10 text-slate-500 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-400">
               No products match your search.
             </Card>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {paginated.map((product) => (
+              {(showAll ? filtered : paginated).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}
 
-          {filtered.length > 0 && (
+          {filtered.length > 0 && !showAll && (
             <div className="mt-6">
               <Pagination
                 currentPage={safePage}
@@ -165,6 +166,17 @@ export default function Products() {
                 pageSize={pageSize}
                 onPageChange={setPage}
               />
+            </div>
+          )}
+
+          {filtered.length > pageSize && (
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => setShowAll((v) => !v)}
+                className="rounded-lg border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white"
+              >
+                {showAll ? "Paginate" : "Show all products"}
+              </button>
             </div>
           )}
         </>

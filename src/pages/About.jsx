@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  ArrowRight, Package, Users, ShoppingBag, Globe,
+  ArrowRight, ShoppingBag, Package, Truck, ShieldCheck, RefreshCw,
   Mail, Phone, MapPin, Send, CheckCircle2,
 } from "lucide-react";
 
@@ -9,23 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 const stats = [
-  { label: "Products in catalog", value: "20+" },
-  { label: "API endpoints", value: "4" },
-  { label: "UI Components", value: "12+" },
-  { label: "Pages", value: "10+" },
+  { label: "Happy Customers", value: "12K+" },
+  { label: "Products Delivered", value: "50K+" },
+  { label: " Brands Available", value: "200+" },
+  { label: "Years in Business", value: "5+" },
 ];
 
-const features = [
-  { icon: Package, label: "Products", desc: "Full CRUD management" },
-  { icon: Users, label: "Users", desc: "Role-based access control" },
-  { icon: ShoppingBag, label: "Cart", desc: "Persistent shopping cart" },
-  { icon: Globe, label: "API", desc: "RESTful data fetching" },
-];
-
-const techGroups = [
-  { title: "Frontend", items: ["React 19", "Vite 8", "Tailwind CSS v4", "shadcn/ui"] },
-  { title: "Data & State", items: ["axios", "react-router-dom v7", "Context API", "localStorage"] },
-  { title: "Tooling", items: ["recharts", "exceljs", "pdfmake", "lucide-react"] },
+const values = [
+  { icon: Package, label: "Quality Products", desc: "Every item is curated for quality and durability." },
+  { icon: Truck, label: "Fast Shipping", desc: "Free delivery on orders over $50, shipped within 24 hours." },
+  { icon: ShieldCheck, label: "Secure Shopping", desc: "Your data and payments are always protected." },
+  { icon: RefreshCw, label: "Easy Returns", desc: "30-day hassle-free return policy on all items." },
 ];
 
 const contactInfo = [
@@ -103,14 +97,14 @@ export default function About() {
       {/* ─── Hero ─── */}
       <section className="text-center">
         <span className="inline-block rounded-full border border-slate-200 bg-white px-4 py-1 text-xs font-medium text-slate-500 shadow-sm dark:border-gray-700 dark:bg-black dark:text-gray-400">
-          About
+          About us
         </span>
         <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl dark:text-white">
-          Built with modern tools
+          More than just a store
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-slate-500 dark:text-gray-400">
-          MSC Store is a frontend demonstration project showcasing a fully functional ecommerce
-          interface built with React 19, Tailwind CSS v4, and shadcn/ui.
+          We&apos;re on a mission to make quality products accessible to everyone.
+          No markups, no gimmicks — just great stuff at fair prices.
         </p>
       </section>
 
@@ -131,24 +125,23 @@ export default function About() {
             Our story
           </h2>
           <p className="mt-4 leading-relaxed text-slate-500 dark:text-gray-400">
-            This project was built as a demonstration of modern React development practices.
-            It features a live product catalog powered by the Fake Store API, a role-based
-            admin dashboard with full CRUD operations, and a clean, responsive UI built
-            with shadcn/ui components.
+            MSC Store started with a simple idea: shopping online shouldn&apos;t be
+            complicated. We partner directly with trusted brands to bring you
+            curated collections at honest prices — no middlemen, no inflated costs.
           </p>
           <p className="mt-4 leading-relaxed text-slate-500 dark:text-gray-400">
-            The admin panel includes data visualization with recharts, Excel and PDF export
-            capabilities, and complete management interfaces for products, users, and categories.
+            Every product on our platform is vetted for quality. From electronics to
+            everyday essentials, we make sure you get exactly what you pay for.
           </p>
           <Link
             to="/products"
             className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-slate-950 px-5 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
           >
-            Browse Products <ArrowRight className="size-4" />
+            Start Shopping <ArrowRight className="size-4" />
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          {features.map((item) => {
+          {values.map((item) => {
             const Icon = item.icon;
             return (
               <Card key={item.label} className="border-slate-200 bg-white p-5 dark:border-gray-700 dark:bg-black">
@@ -160,25 +153,6 @@ export default function About() {
               </Card>
             );
           })}
-        </div>
-      </section>
-
-      {/* ─── Tech Stack ─── */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-12 dark:border-gray-700 dark:bg-black">
-        <h2 className="text-center text-2xl font-semibold text-slate-950 sm:text-3xl dark:text-white">
-          Tech Stack
-        </h2>
-        <div className="mt-8 grid gap-4 text-center text-sm sm:grid-cols-3">
-          {techGroups.map((group) => (
-            <div key={group.title}>
-              <p className="mb-3 font-semibold text-slate-950 dark:text-white">{group.title}</p>
-              <ul className="space-y-1.5 text-slate-500 dark:text-gray-400">
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
       </section>
 
