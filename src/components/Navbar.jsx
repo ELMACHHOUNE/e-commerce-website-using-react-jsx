@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, ShoppingBag, LogOut, LayoutDashboard, Settings, Shield, UserPlus, Sun, Moon } from "lucide-react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import { SearchInput } from "@/components/ui/search-input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -12,7 +13,6 @@ const navItems = [
   { to: "/products", label: "Products" },
   { to: "/categories", label: "Categories" },
   { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
@@ -20,6 +20,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -40,9 +41,26 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/85">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex shrink-0 items-center">
           <img src="/logo.png" alt="MSC Store" className="h-10 w-auto" />
         </Link>
+
+        <div className="hidden md:block">
+          <SearchInput
+            value={searchParams.get("search") || ""}
+            onChange={(v) => {
+              const params = new URLSearchParams(searchParams);
+              if (v) {
+                params.set("search", v);
+              } else {
+                params.delete("search");
+              }
+              setSearchParams(params, { replace: true });
+              navigate(`/products?${params.toString()}`);
+            }}
+            placeholder="Search products..."
+          />
+        </div>
 
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
@@ -163,6 +181,22 @@ export default function Navbar() {
             <Menu className="size-4" />
           </Button>
         </div>
+      </div>
+
+      <div className="border-t border-slate-200 px-4 py-2 dark:border-slate-800 md:hidden">
+        <SearchInput
+          value={searchParams.get("search") || ""}
+          onChange={(v) => {
+            const params = new URLSearchParams(searchParams);
+            if (v) {
+              params.set("search", v);
+            } else {
+              params.delete("search");
+            }
+            navigate(`/products?${params.toString()}`);
+          }}
+          placeholder="Search products..."
+        />
       </div>
     </header>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, DollarSign } from "lucide-react";
 
 import Loader from "@/components/Loader";
 import ProductCard from "@/components/ProductCard";
@@ -8,21 +9,28 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Pagination } from "@/components/ui/pagination";
-import { SearchInput } from "@/components/ui/search-input";
 
 export default function Products() {
   const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [search, setSearch] = useState("");
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const [page, setPage] = useState(1);
   const pageSize = 8;
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const filtered = products.filter((p) => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    return p.title?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q);
+    if (search) {
+      const q = search.toLowerCase();
+      const matchesSearch = p.title?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q);
+      if (!matchesSearch) return false;
+    }
+    if (minPrice && p.price < Number(minPrice)) return false;
+    if (maxPrice && p.price > Number(maxPrice)) return false;
+    return true;
   });
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -72,8 +80,56 @@ export default function Products() {
             a responsive shadcn grid.
           </p>
         </div>
-      </div>
 
+          <div className="flex items-center gap-2">
+            <DollarSign className="size-4 shrink-0 text-slate-400" />
+            <select
+              value={
+                minPrice || maxPrice
+                  ? `${minPrice || "0"}-${maxPrice || ""}`
+                  : ""
+              }
+              onChange={(e) => {
+                const val = e.target.value;
+                if (!val) {
+                  setMinPrice("");
+                  setMaxPrice("");
+                } else {
+                  const [min, max] = val.split("-");
+                  setMinPrice(min);
+                  setMaxPrice(max || "");
+                }
+                setPage(1);
+              }}
+              className="h-9 rounded-lg border border-slate-200 bg-white px-2.5 text-sm outline-none transition-colors focus:border-slate-300 focus:ring-2 focus:ring-slate-200/50 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-gray-700/50"
+            >
+              <option value="">All prices</option>
+              <option value="0-50">Under $50</option>
+              <option value="50-100">$50 – $100</option>
+              <option value="100-200">$100 – $200</option>
+              <option value="200-500">$200 – $500</option>
+              <option value="500-">Over $500</option>
+            </select>
+            <span className="hidden text-xs text-slate-400 sm:inline">or</span>
+            <input
+              type="number"
+              min="0"
+              placeholder="Min"
+              value={minPrice}
+              onChange={(e) => { setMinPrice(e.target.value); setPage(1); }}
+              className="h-9 w-16 rounded-lg border border-slate-200 bg-white px-2 text-sm outline-none transition-colors focus:border-slate-300 focus:ring-2 focus:ring-slate-200/50 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-gray-700/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+            <span className="text-slate-300 dark:text-gray-600">—</span>
+            <input
+              type="number"
+              min="0"
+              placeholder="Max"
+              value={maxPrice}
+              onChange={(e) => { setMaxPrice(e.target.value); setPage(1); }}
+              className="h-9 w-16 rounded-lg border border-slate-200 bg-white px-2 text-sm outline-none transition-colors focus:border-slate-300 focus:ring-2 focus:ring-slate-200/50 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-gray-700/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+          </div>
+      </div>
       {loading ? (
         <Loader loading={loading} fullScreen={false} />
       ) : error ? (
@@ -88,14 +144,6 @@ export default function Products() {
         </Card>
       ) : (
         <>
-          <div className="mb-4">
-            <SearchInput
-              value={search}
-              onChange={(v) => { setSearch(v); setPage(1); }}
-              placeholder="Search products by name or category..."
-            />
-          </div>
-
           {paginated.length === 0 ? (
             <Card className="flex items-center justify-center border-slate-200 bg-white p-10 text-slate-500 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-400">
               No products match your search.

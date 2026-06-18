@@ -9,7 +9,7 @@ import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
-import Contact from "./pages/Contact";
+import Contact from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
