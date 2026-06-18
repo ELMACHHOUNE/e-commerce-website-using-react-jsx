@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Globe, Eye, EyeOff, User, Phone } from "lucide-react";
+import { Eye, EyeOff, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import FileUpload from "@/components/ui/file-upload";
@@ -60,11 +60,11 @@ export default function Auth() {
   const heroImage = isLogin ? "/images/login.png" : "/images/signup.png";
 
   return (
-    <div className="h-screen bg-slate-50 p-6">
+    <div className="h-screen bg-slate-50 p-6 dark:bg-gray-950">
       <div className="mx-auto flex h-full max-w-6xl items-center justify-center">
         <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-6 max-h-[calc(100vh-3rem)]">
           {/* Left visual column - hidden on mobile */}
-          <div className="hidden md:block rounded-3xl overflow-hidden bg-slate-900 text-white relative h-full min-h-0">
+          <div className="hidden md:block rounded-3xl overflow-hidden bg-slate-900 text-white relative h-full min-h-0 dark:bg-white dark:text-gray-950">
             <img
               src={heroImage}
               alt={isLogin ? "Login" : "Sign Up"}
@@ -89,7 +89,7 @@ export default function Auth() {
                 <h1 className="mt-6 font-serif text-3xl">
                   {isLogin ? "Welcome Back" : "Create Account"}
                 </h1>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-slate-600 dark:text-gray-400">
                   {isLogin
                     ? "Enter your email and password to access your account"
                     : "Enter your details to create an account"}
@@ -120,7 +120,7 @@ export default function Auth() {
                   {!isLogin && (
                     <>
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                        <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                           Profile Image
                         </label>
                         <FileUpload
@@ -130,35 +130,35 @@ export default function Auth() {
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                        <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                           Full Name
                         </label>
                         <div className="relative">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                          <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400 dark:text-gray-500" />
                           <input
                             type="text"
                             placeholder="Enter your full name"
                             required
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            className="w-full rounded-md border border-slate-200 bg-slate-50 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                            className="w-full rounded-md border border-slate-200 bg-slate-50 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                        <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                           Phone Number
                         </label>
                         <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400 dark:text-gray-500" />
                           <input
                             type="tel"
                             placeholder="Enter your phone number"
                             required
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="w-full rounded-md border border-slate-200 bg-slate-50 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                            className="w-full rounded-md border border-slate-200 bg-slate-50 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                           />
                         </div>
                       </div>
@@ -166,7 +166,7 @@ export default function Auth() {
                   )}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                       Email
                     </label>
                     <input
@@ -175,12 +175,12 @@ export default function Auth() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                     />
                   </div>
 
                   <div className="relative">
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                       Password
                     </label>
                     <input
@@ -189,12 +189,12 @@ export default function Auth() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm pr-10 outline-none focus:ring-2 focus:ring-slate-200"
+                      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm pr-10 outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((v) => !v)}
-                      className="absolute right-2 top-9 inline-flex items-center rounded px-2 text-slate-500"
+                      className="absolute right-2 top-9 inline-flex items-center rounded px-2 text-slate-500 dark:text-gray-400"
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
                       }
@@ -209,7 +209,7 @@ export default function Auth() {
 
                   {!isLogin && (
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-700">
+                      <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                         Confirm Password
                       </label>
                       <input
@@ -218,7 +218,7 @@ export default function Auth() {
                         required
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                       />
                     </div>
                   )}
@@ -230,13 +230,13 @@ export default function Auth() {
                           type="checkbox"
                           checked={remember}
                           onChange={(e) => setRemember(e.target.checked)}
-                          className="h-4 w-4 rounded border-slate-200 text-slate-900"
+                          className="h-4 w-4 rounded border-slate-200 text-slate-900 dark:border-gray-700 dark:text-white"
                         />
-                        <span className="text-slate-600">Remember me</span>
+                        <span className="text-slate-600 dark:text-gray-400">Remember me</span>
                       </label>
 
                       <a
-                        className="text-sm text-slate-500 hover:underline"
+                        className="text-sm text-slate-500 dark:text-gray-400 hover:underline"
                         href="#"
                       >
                         Forgot Password?
@@ -247,7 +247,7 @@ export default function Auth() {
                   <div className="space-y-3">
                     <Button
                       type="submit"
-                      className="w-full bg-slate-900 text-white hover:bg-slate-800"
+                      className="w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-100"
                     >
                       {isLogin ? "Sign In" : "Sign Up"}
                     </Button>
@@ -260,13 +260,13 @@ export default function Auth() {
                 </form>
               )}
 
-              <div className="mt-6 text-center text-sm text-slate-600">
+              <div className="mt-6 text-center text-sm text-slate-600 dark:text-gray-400">
                 {isLogin
                   ? "Don't have an account? "
                   : "Already have an account? "}
                 <button
                   onClick={switchMode}
-                  className="font-medium text-slate-900"
+                  className="font-medium text-slate-900 dark:text-white"
                 >
                   {isLogin ? "Sign Up" : "Sign In"}
                 </button>

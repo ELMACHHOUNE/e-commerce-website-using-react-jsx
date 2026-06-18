@@ -15,13 +15,13 @@ export default function About() {
     <div className="space-y-20 py-4 sm:space-y-28 sm:py-8">
       {/* Header */}
       <section className="text-center">
-        <span className="inline-block rounded-full border border-slate-200 bg-white px-4 py-1 text-xs font-medium text-slate-500 shadow-sm">
+        <span className="inline-block rounded-full border border-slate-200 bg-white px-4 py-1 text-xs font-medium text-slate-500 shadow-sm dark:border-gray-700 dark:bg-black dark:text-gray-400">
           About
         </span>
-        <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+        <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl dark:text-white">
           Built with modern tools
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-slate-500">
+        <p className="mx-auto mt-4 max-w-xl text-slate-500 dark:text-gray-400">
           MSC Store is a frontend demonstration project showcasing a fully functional ecommerce
           interface built with React 19, Tailwind CSS v4, and shadcn/ui.
         </p>
@@ -30,9 +30,9 @@ export default function About() {
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (
-          <Card key={s.label} className="border-slate-200 bg-white p-6 text-center">
-            <p className="text-3xl font-bold text-slate-950">{s.value}</p>
-            <p className="mt-1 text-sm text-slate-500">{s.label}</p>
+          <Card key={s.label} className="border-slate-200 bg-white p-6 text-center dark:border-gray-700 dark:bg-black">
+            <p className="text-3xl font-bold text-slate-950 dark:text-white">{s.value}</p>
+            <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">{s.label}</p>
           </Card>
         ))}
       </div>
@@ -40,22 +40,22 @@ export default function About() {
       {/* Story */}
       <section className="grid gap-10 lg:grid-cols-2 lg:items-center">
         <div>
-          <h2 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
             Our story
           </h2>
-          <p className="mt-4 leading-relaxed text-slate-500">
+          <p className="mt-4 leading-relaxed text-slate-500 dark:text-gray-400">
             This project was built as a demonstration of modern React development practices.
             It features a live product catalog powered by the Fake Store API, a role-based
             admin dashboard with full CRUD operations, and a clean, responsive UI built
             with shadcn/ui components.
           </p>
-          <p className="mt-4 leading-relaxed text-slate-500">
+          <p className="mt-4 leading-relaxed text-slate-500 dark:text-gray-400">
             The admin panel includes data visualization with recharts, Excel and PDF export
             capabilities, and complete management interfaces for products, users, and categories.
           </p>
           <Link
             to="/products"
-            className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-slate-950 px-5 text-sm font-medium text-white transition hover:bg-slate-800"
+            className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-slate-950 px-5 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
           >
             Browse Products <ArrowRight className="size-4" />
           </Link>
@@ -69,12 +69,12 @@ export default function About() {
           ].map((item) => {
             const Icon = item.icon;
             return (
-              <Card key={item.label} className="border-slate-200 bg-white p-5">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-slate-100">
-                  <Icon className="size-5 text-slate-700" />
+              <Card key={item.label} className="border-slate-200 bg-white p-5 dark:border-gray-700 dark:bg-black">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-gray-900">
+                  <Icon className="size-5 text-slate-700 dark:text-gray-300" />
                 </div>
-                <p className="mt-3 text-sm font-semibold text-slate-950">{item.label}</p>
-                <p className="text-xs text-slate-500">{item.desc}</p>
+                <p className="mt-3 text-sm font-semibold text-slate-950 dark:text-white">{item.label}</p>
+                <p className="text-xs text-slate-500 dark:text-gray-400">{item.desc}</p>
               </Card>
             );
           })}
@@ -82,8 +82,8 @@ export default function About() {
       </section>
 
       {/* Tech */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-12">
-        <h2 className="text-center text-2xl font-semibold text-slate-950 sm:text-3xl">
+      <section className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-12 dark:border-gray-700 dark:bg-black">
+        <h2 className="text-center text-2xl font-semibold text-slate-950 sm:text-3xl dark:text-white">
           Tech Stack
         </h2>
         <div className="mt-8 grid gap-4 text-center text-sm sm:grid-cols-3">
@@ -93,8 +93,8 @@ export default function About() {
             { title: "Tooling", items: ["recharts", "exceljs", "pdfmake", "lucide-react"] },
           ].map((group) => (
             <div key={group.title}>
-              <p className="mb-3 font-semibold text-slate-950">{group.title}</p>
-              <ul className="space-y-1.5 text-slate-500">
+              <p className="mb-3 font-semibold text-slate-950 dark:text-white">{group.title}</p>
+              <ul className="space-y-1.5 text-slate-500 dark:text-gray-400">
                 {group.items.map((item) => (
                   <li key={item}>{item}</li>
                 ))}

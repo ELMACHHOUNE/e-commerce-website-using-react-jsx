@@ -38,7 +38,7 @@ export default function Checkout() {
       <section className="mx-auto max-w-3xl px-4 py-10">
         <h1 className="mb-6 text-2xl font-semibold">Checkout</h1>
         <Card className="p-6 text-center">
-          <p className="text-slate-600">Your cart is empty.</p>
+          <p className="text-slate-600 dark:text-gray-400">Your cart is empty.</p>
           <Button className="mt-4" onClick={() => navigate("/products")}>
             Browse Products
           </Button>
@@ -54,10 +54,10 @@ export default function Checkout() {
         <Card className="p-6 text-center">
           <div className="mb-4 text-4xl">&#10003;</div>
           <h2 className="text-xl font-semibold">Order Placed!</h2>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-2 text-slate-600 dark:text-gray-400">
             Thank you, {form.name}. Your order has been placed successfully.
           </p>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
             A confirmation email has been sent to {form.email}.
           </p>
           <Button className="mt-6" onClick={handleConfirm}>
@@ -80,7 +80,7 @@ export default function Checkout() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                     Full Name
                   </label>
                   <input
@@ -90,11 +90,11 @@ export default function Checkout() {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                     Email
                   </label>
                   <input
@@ -104,13 +104,13 @@ export default function Checkout() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
-                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Phone Number
                 </label>
                 <input
@@ -120,12 +120,12 @@ export default function Checkout() {
                   value={form.phone}
                   onChange={handleChange}
                   placeholder="+1 (555) 123-4567"
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Address
                 </label>
                 <input
@@ -135,13 +135,13 @@ export default function Checkout() {
                   value={form.address}
                   onChange={handleChange}
                   placeholder="123 Main Street, Apt 4B"
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                     City
                   </label>
                   <input
@@ -151,11 +151,11 @@ export default function Checkout() {
                     value={form.city}
                     onChange={handleChange}
                     placeholder="New York"
-                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                     ZIP Code
                   </label>
                   <input
@@ -165,14 +165,14 @@ export default function Checkout() {
                     value={form.zip}
                     onChange={handleChange}
                     placeholder="10001"
-                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                    className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                   />
                 </div>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-slate-900 text-white hover:bg-slate-800"
+                className="w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
               >
                 Review Order
               </Button>
@@ -196,7 +196,7 @@ export default function Checkout() {
                     <div className="text-sm font-medium truncate">
                       {it.title}
                     </div>
-                    <div className="text-xs text-slate-500">Qty: {it.qty}</div>
+                    <div className="text-xs text-slate-500 dark:text-gray-400">Qty: {it.qty}</div>
                   </div>
                   <div className="text-sm font-medium">
                     ${(it.price * it.qty).toFixed(2)}
@@ -207,12 +207,12 @@ export default function Checkout() {
 
             <div className="mt-4 border-t pt-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Subtotal</span>
+                <span className="text-sm text-slate-600 dark:text-gray-400">Subtotal</span>
                 <span className="font-medium">${total}</span>
               </div>
               <div className="flex items-center justify-between mt-2">
-                <span className="text-sm text-slate-600">Shipping</span>
-                <span className="text-sm text-slate-600">Free</span>
+                <span className="text-sm text-slate-600 dark:text-gray-400">Shipping</span>
+                <span className="text-sm text-slate-600 dark:text-gray-400">Free</span>
               </div>
               <div className="flex items-center justify-between mt-2 border-t pt-2">
                 <span className="font-medium">Total</span>

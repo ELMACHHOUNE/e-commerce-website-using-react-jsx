@@ -14,9 +14,11 @@ import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 export default function App() {
   return (
+    <ThemeProvider>
     <AuthProvider>
       <CartProvider>
         <Routes>
@@ -36,5 +38,6 @@ export default function App() {
         </Routes>
       </CartProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }

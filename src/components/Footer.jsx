@@ -34,26 +34,26 @@ const pageLinks = [
 
 export default function Footer() {
   return (
-    <footer>
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 lg:grid-cols-3">
-        {/* Child 1 - Left: White bg with logo */}
-        <div className="flex flex-col items-center justify-center border-t border-zinc-200 bg-gradient-to-b from-slate-50 to-white px-8 py-12 text-center">
+    <footer className="border-t border-gray-200 dark:border-gray-800">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 md:grid-cols-3 px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <div className="flex flex-col items-center justify-center border-b border-gray-200 px-8 py-12 text-center dark:border-gray-800 md:border-b-0 md:border-r">
           <img
             src="/logo.png"
             alt="MSC Store"
-            className="h-36 w-auto object-contain"
+            className="h-28 w-auto object-contain dark:brightness-200"
           />
         </div>
 
-        {/* Child 2 - Black bg with Pages links */}
-        <div className="border-t border-zinc-800 bg-black px-8 py-12 text-zinc-100">
-          <h2 className="text-base font-semibold text-white">Pages</h2>
-          <div className="mt-5 space-y-4 text-sm text-zinc-400">
+        {/* Pages links */}
+        <div className="border-b border-gray-200 px-8 py-12 dark:border-gray-800 md:border-b-0">
+          <h2 className="text-sm font-semibold tracking-wide uppercase text-gray-900 dark:text-gray-100">Pages</h2>
+          <div className="mt-6 space-y-3">
             {pageLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.to}
-                className="block transition hover:text-white"
+                className="block text-sm text-gray-500 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
               >
                 {link.label}
               </Link>
@@ -61,10 +61,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Child 3 - Black bg with social icons and copyright */}
-        <div className="border-t border-zinc-800 bg-black px-8 py-12 text-zinc-100">
-          <h2 className="text-base font-semibold text-white">Follow Us</h2>
-          <div className="mt-5 flex items-center gap-4">
+        {/* Social icons and copyright */}
+        <div className="px-8 py-12">
+          <h2 className="text-sm font-semibold tracking-wide uppercase text-gray-900 dark:text-gray-100">Follow Us</h2>
+          <div className="mt-6 flex items-center gap-3">
             {socialIcons.map((s) => (
               <a
                 key={s.label}
@@ -72,7 +72,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={s.label}
-                className="flex size-9 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition hover:bg-white hover:text-black"
+                className="flex size-9 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition hover:border-gray-900 hover:text-gray-900 dark:border-gray-700 dark:text-gray-500 dark:hover:border-gray-100 dark:hover:text-gray-100"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -88,8 +88,8 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <p className="mt-10 border-t border-zinc-800 pt-6 text-sm text-zinc-600">
-            © Copyright MSC Studios 2026. All rights reserved.
+          <p className="mt-10 text-xs text-gray-400 dark:text-gray-600">
+            &copy; Copyright MSC Studios 2026. All rights reserved.
           </p>
         </div>
       </div>

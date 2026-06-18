@@ -62,42 +62,42 @@ export default function Settings() {
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Full Name
                 </label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Email
                 </label>
                 <input
                   type="email"
                   value={user.email}
                   disabled
-                  className="w-full rounded-md border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-500 outline-none cursor-not-allowed"
+                  className="w-full rounded-md border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-500 outline-none cursor-not-allowed dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Phone
                 </label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
             </div>
             <Button
               type="submit"
-              className="bg-slate-900 text-white hover:bg-slate-800"
+              className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
             >
               <Save className="mr-2 size-4" />
               Save Changes
@@ -115,9 +115,9 @@ export default function Settings() {
               type="checkbox"
               checked={notifications}
               onChange={(e) => setNotifications(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-200 text-slate-900"
+              className="h-4 w-4 rounded border-slate-200 text-slate-900 dark:border-gray-700 dark:text-gray-100"
             />
-            <span className="text-sm text-slate-700">
+            <span className="text-sm text-slate-700 dark:text-gray-300">
               Receive email notifications about orders and promotions
             </span>
           </label>
@@ -131,27 +131,27 @@ export default function Settings() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   New Password
                 </label>
                 <input
                   type="password"
                   placeholder="Enter new password"
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Confirm Password
                 </label>
                 <input
                   type="password"
                   placeholder="Confirm new password"
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
             </div>
-            <Button className="bg-slate-900 text-white hover:bg-slate-800">
+            <Button className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200">
               <Save className="mr-2 size-4" />
               Update Password
             </Button>

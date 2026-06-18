@@ -46,17 +46,17 @@ export default function Loader({ onFinish, loading, fullScreen = true }) {
 
   const content = (
     <div className="flex flex-col items-center gap-8">
-      <div className="rounded-2xl bg-white/80 p-5 shadow-lg shadow-slate-950/5 backdrop-blur-sm ring-1 ring-slate-200/50">
+      <div className="rounded-2xl bg-white/80 p-5 shadow-lg shadow-black/5 backdrop-blur-sm ring-1 ring-black/10 dark:bg-black/80 dark:ring-white/10">
         <img src="/logo.png" alt="MSC Store" className="h-16 w-auto" />
       </div>
       <div className="flex flex-col items-center gap-3">
-        <div className="h-1 w-48 overflow-hidden rounded-full bg-slate-200">
+        <div className="h-1 w-48 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
           <div
-            className="h-full rounded-full bg-slate-950 transition-[width] duration-300 ease-out"
+            className="h-full rounded-full bg-gray-950 dark:bg-white transition-[width] duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="text-sm font-medium text-slate-500 tabular-nums">
+        <span className="text-sm font-medium text-gray-500 tabular-nums dark:text-gray-400">
           {Math.round(progress)}%
         </span>
       </div>

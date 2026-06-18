@@ -70,7 +70,7 @@ export default function Dashboard() {
                   </Button>
                   <Button
                     size="sm"
-                    className="bg-slate-900 text-white hover:bg-slate-800"
+                    className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
                     onClick={saveEdit}
                   >
                     <Save className="mr-1 size-3" />
@@ -95,42 +95,42 @@ export default function Dashboard() {
           {editing ? (
             <div className="space-y-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Profile Image
                 </label>
                 <FileUpload value={editAvatar} onChange={setEditAvatar} className="max-w-60" />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Full Name
                 </label>
                 <input
                   type="text"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Phone
                 </label>
                 <input
                   type="tel"
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-gray-300">
                   Email
                 </label>
                 <input
                   type="email"
                   value={user.email}
                   disabled
-                  className="w-full rounded-md border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-500 outline-none cursor-not-allowed"
+                  className="w-full rounded-md border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-500 outline-none cursor-not-allowed dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
                 />
               </div>
             </div>
@@ -141,20 +141,20 @@ export default function Dashboard() {
                   <img
                     src={user.avatar}
                     alt=""
-                    className="size-16 rounded-full object-cover ring-2 ring-slate-200"
+                    className="size-16 rounded-full object-cover ring-2 ring-slate-200 dark:ring-gray-700"
                   />
                 ) : (
-                  <div className="flex size-16 items-center justify-center rounded-full bg-slate-200 text-lg font-semibold text-slate-600">
+                  <div className="flex size-16 items-center justify-center rounded-full bg-slate-200 text-lg font-semibold text-slate-600 dark:bg-gray-800 dark:text-gray-400">
                     {(user.fullName || user.name || user.email).charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div>
                   <p className="font-medium text-lg">{user.fullName || "N/A"}</p>
-                  <p className="text-sm text-slate-500">{user.email}</p>
+                  <p className="text-sm text-slate-500 dark:text-gray-400">{user.email}</p>
                 </div>
               </div>
-              <div className="pt-3 border-t border-slate-100">
-                <span className="text-sm text-slate-500">Phone</span>
+              <div className="pt-3 border-t border-slate-100 dark:border-gray-800">
+                <span className="text-sm text-slate-500 dark:text-gray-400">Phone</span>
                 <p className="font-medium">{user.phone || "N/A"}</p>
               </div>
             </div>
@@ -163,20 +163,20 @@ export default function Dashboard() {
 
         <div className="space-y-4">
           <Card className="p-6">
-            <h3 className="text-sm font-medium flex items-center gap-2 text-slate-700">
+            <h3 className="text-sm font-medium flex items-center gap-2 text-slate-700 dark:text-gray-300">
               <Package className="size-4" />
               Orders
             </h3>
             <p className="mt-2 text-2xl font-semibold">0</p>
-            <p className="text-xs text-slate-500">No orders yet</p>
+            <p className="text-xs text-slate-500 dark:text-gray-400">No orders yet</p>
           </Card>
           <Card className="p-6">
-            <h3 className="text-sm font-medium flex items-center gap-2 text-slate-700">
+            <h3 className="text-sm font-medium flex items-center gap-2 text-slate-700 dark:text-gray-300">
               <MapPin className="size-4" />
               Addresses
             </h3>
             <p className="mt-2 text-2xl font-semibold">0</p>
-            <p className="text-xs text-slate-500">No addresses saved</p>
+            <p className="text-xs text-slate-500 dark:text-gray-400">No addresses saved</p>
           </Card>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function Dashboard() {
             <CreditCard className="size-5" />
             Recent Orders
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-gray-400">
             You haven't placed any orders yet.
           </p>
           <Button className="mt-4" onClick={() => navigate("/products")}>

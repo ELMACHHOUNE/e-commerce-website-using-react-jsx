@@ -6,13 +6,35 @@ import CartDrawer from "./CartDrawer";
 
 export default function Layout() {
   return (
-    <div className="flex min-h-screen flex-col bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.06),_transparent_35%),linear-gradient(180deg,_#f8fafc,_#ffffff_45%,_#f8fafc)] text-slate-950">
+    <div className="relative flex min-h-screen flex-col bg-white dark:bg-slate-950 transition-colors">
+      {/* Grid background with radial fade mask */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-[length:32px_32px] dark:bg-[length:32px_32px]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, #d1d5db 1px, transparent 1px), linear-gradient(to bottom, #d1d5db 1px, transparent 1px)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)",
+          maskImage:
+            "radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)",
+        }}
+      />
+      {/* Dark mode grid overlay */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 hidden dark:block bg-[length:32px_32px]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)",
+          maskImage:
+            "radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)",
+        }}
+      />
       <Navbar />
       <CartDrawer />
-      <main className="mx-auto flex w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-        <div className="w-full">
-          <Outlet />
-        </div>
+      <main className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <Outlet />
       </main>
       <Footer />
     </div>

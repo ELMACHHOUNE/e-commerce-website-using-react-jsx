@@ -29,17 +29,17 @@ export default function Categories() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Badge variant="secondary">Categories</Badge>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
             Browse by collection.
           </h1>
-          <p className="mt-2 max-w-2xl text-slate-600">
+          <p className="mt-2 max-w-2xl text-slate-600 dark:text-gray-400">
             The categories page is kept lightweight and consistent with the new
             storefront shell.
           </p>
         </div>
         <Link
           to="/products"
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-950 transition hover:bg-slate-50"
+          className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-950 dark:text-white transition hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-950 dark:hover:bg-gray-900"
         >
           View all products <ArrowRight className="ml-2 size-4" />
         </Link>
@@ -47,9 +47,9 @@ export default function Categories() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {categories.map((category) => (
-          <Card key={category.name} className="border-slate-200 bg-white p-6">
+          <Card key={category.name} className="border-slate-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-950">
             <Badge className="capitalize">{category.name}</Badge>
-            <p className="mt-4 text-sm leading-6 text-slate-600">
+            <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-gray-400">
               {category.description}
             </p>
           </Card>

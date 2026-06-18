@@ -123,12 +123,12 @@ function Toast({ message, type = "success", onClose }) {
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  const bg = type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600";
+  const bg = type === "success" ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400" : "bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400";
   const Icon = type === "success" ? CheckCircle2 : AlertCircle;
 
   return (
     <div className={`fixed bottom-6 right-6 z-[9999] flex items-center gap-2 rounded-xl border px-4 py-3 text-sm shadow-lg backdrop-blur-sm ${bg} ${
-      type === "success" ? "border-green-200" : "border-red-200"
+      type === "success" ? "border-green-200 dark:border-green-800" : "border-red-200 dark:border-red-800"
     }`}>
       <Icon className="size-4 shrink-0" />
       {message}
@@ -141,13 +141,13 @@ function Toast({ message, type = "success", onClose }) {
 function SummaryCard({ icon: Icon, label, value, sub }) {
   return (
     <Card className="flex items-center gap-4 p-5">
-      <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-slate-100">
-        <Icon className="size-5 text-slate-700" />
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-gray-900">
+        <Icon className="size-5 text-slate-700 dark:text-gray-300" />
       </div>
       <div className="min-w-0">
-        <p className="text-sm text-slate-500">{label}</p>
-        <p className="text-2xl font-semibold text-slate-950">{value}</p>
-        {sub && <p className="text-xs text-slate-400">{sub}</p>}
+        <p className="text-sm text-slate-500 dark:text-gray-400">{label}</p>
+        <p className="text-2xl font-semibold text-slate-950 dark:text-white">{value}</p>
+        {sub && <p className="text-xs text-slate-400 dark:text-gray-500">{sub}</p>}
       </div>
     </Card>
   );
@@ -159,8 +159,8 @@ function ProductsBarChart({ data }) {
   if (!data.length) return null;
   return (
     <Card className="p-5">
-      <h3 className="mb-1 text-sm font-medium text-slate-700">Products per Category</h3>
-      <p className="mb-4 text-xs text-slate-400">Distribution across all product categories</p>
+      <h3 className="mb-1 text-sm font-medium text-slate-700 dark:text-gray-300">Products per Category</h3>
+      <p className="mb-4 text-xs text-slate-400 dark:text-gray-500">Distribution across all product categories</p>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
@@ -189,8 +189,8 @@ function UsersPieChart({ adminCount, userCount }) {
   if (!adminCount && !userCount) return null;
   return (
     <Card className="p-5">
-      <h3 className="mb-1 text-sm font-medium text-slate-700">User Roles</h3>
-      <p className="mb-4 text-xs text-slate-400">Admin vs regular user distribution</p>
+      <h3 className="mb-1 text-sm font-medium text-slate-700 dark:text-gray-300">User Roles</h3>
+      <p className="mb-4 text-xs text-slate-400 dark:text-gray-500">Admin vs regular user distribution</p>
       <div className="flex items-center justify-center h-64">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -203,8 +203,8 @@ function UsersPieChart({ adminCount, userCount }) {
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute flex flex-col items-center">
-          <span className="text-2xl font-semibold text-slate-950">{adminCount + userCount}</span>
-          <span className="text-xs text-slate-400">total</span>
+          <span className="text-2xl font-semibold text-slate-950 dark:text-white">{adminCount + userCount}</span>
+          <span className="text-xs text-slate-400 dark:text-gray-500">total</span>
         </div>
       </div>
       <div className="flex justify-center gap-6 text-xs">
@@ -225,8 +225,8 @@ function PriceRangeChart({ data }) {
   if (!data.length) return null;
   return (
     <Card className="p-5">
-      <h3 className="mb-1 text-sm font-medium text-slate-700">Price Range Overview</h3>
-      <p className="mb-4 text-xs text-slate-400">Product prices sorted ascending</p>
+      <h3 className="mb-1 text-sm font-medium text-slate-700 dark:text-gray-300">Price Range Overview</h3>
+      <p className="mb-4 text-xs text-slate-400 dark:text-gray-500">Product prices sorted ascending</p>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
@@ -248,8 +248,8 @@ function CategoryAreaChart({ data }) {
   if (!data.length) return null;
   return (
     <Card className="p-5">
-      <h3 className="mb-1 text-sm font-medium text-slate-700">Category Distribution</h3>
-      <p className="mb-4 text-xs text-slate-400">Cumulative product count by category</p>
+      <h3 className="mb-1 text-sm font-medium text-slate-700 dark:text-gray-300">Category Distribution</h3>
+      <p className="mb-4 text-xs text-slate-400 dark:text-gray-500">Cumulative product count by category</p>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
@@ -279,35 +279,35 @@ function ProductForm({ initial, onSave, onCancel }) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-slate-700">Title</label>
+        <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Title</label>
         <input name="title" value={form.title} onChange={handleChange}
-          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700">Price</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Price</label>
           <input name="price" type="number" step="0.01" value={form.price} onChange={handleChange}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700">Category</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Category</label>
           <input name="category" value={form.category} onChange={handleChange}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
         </div>
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-slate-700">Image URL</label>
+        <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Image URL</label>
         <input name="image" value={form.image} onChange={handleChange}
-          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-slate-700">Description</label>
+        <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Description</label>
         <textarea name="description" rows="3" value={form.description} onChange={handleChange}
-          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 resize-none" />
+          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700 resize-none" />
       </div>
       <div className="flex gap-2 justify-end pt-2">
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
-        <Button onClick={() => onSave(form)} className="bg-slate-900 text-white hover:bg-slate-800">
+        <Button onClick={() => onSave(form)} className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-100">
           {initial ? "Update" : "Create"} Product
         </Button>
       </div>
@@ -325,32 +325,32 @@ function UserForm({ initial, onSave, onCancel }) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-slate-700">Full Name</label>
+        <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Full Name</label>
         <input name="fullName" value={form.fullName} onChange={handleChange}
-          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700">Email</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Email</label>
           <input name="email" type="email" value={form.email} onChange={handleChange}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700">Password</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Password</label>
           <input name="password" type="password" value={form.password} onChange={handleChange}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700">Phone</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Phone</label>
           <input name="phone" value={form.phone} onChange={handleChange}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700">Role</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Role</label>
           <select name="role" value={form.role} onChange={handleChange}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200">
+            className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700">
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
@@ -358,7 +358,7 @@ function UserForm({ initial, onSave, onCancel }) {
       </div>
       <div className="flex gap-2 justify-end pt-2">
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
-        <Button onClick={() => onSave(form)} className="bg-slate-900 text-white hover:bg-slate-800">
+        <Button onClick={() => onSave(form)} className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-100">
           {initial ? "Update" : "Create"} User
         </Button>
       </div>
@@ -371,13 +371,13 @@ function CategoryForm({ initial, onSave, onCancel }) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-slate-700">Category Name</label>
+        <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-gray-300">Category Name</label>
         <input value={name} onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200" />
+          className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200 dark:border-gray-700 dark:bg-gray-950 dark:focus:ring-gray-700" />
       </div>
       <div className="flex gap-2 justify-end pt-2">
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
-        <Button onClick={() => onSave({ name })} className="bg-slate-900 text-white hover:bg-slate-800">
+        <Button onClick={() => onSave({ name })} className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-100">
           {initial ? "Update" : "Create"} Category
         </Button>
       </div>
@@ -621,7 +621,7 @@ export default function AdminDashboard() {
   function renderManagementHeader({ onExcel, onPdf }) {
     return (
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold text-slate-950 capitalize">
+        <h1 className="text-2xl font-semibold text-slate-950 dark:text-white capitalize">
           {activeTab} Management
         </h1>
         <div className="flex items-center gap-2">
@@ -633,7 +633,7 @@ export default function AdminDashboard() {
             <FileText className="mr-1.5 size-3.5" />
             PDF
           </Button>
-          <Button onClick={openAddForm} className="bg-slate-900 text-white hover:bg-slate-800">
+          <Button onClick={openAddForm} className="bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-100">
             <Plus className="mr-1.5 size-4" />
             Add {activeTab === "products" ? "Product" : activeTab === "users" ? "User" : "Category"}
           </Button>
@@ -645,7 +645,7 @@ export default function AdminDashboard() {
   return (
     <div className="flex gap-6">
       <aside className="hidden w-52 shrink-0 flex-col md:flex">
-        <nav className="space-y-1 rounded-xl border border-slate-200 bg-white p-2">
+        <nav className="space-y-1 rounded-xl border border-slate-200 bg-white p-2 dark:border-gray-700 dark:bg-gray-950">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -654,8 +654,8 @@ export default function AdminDashboard() {
                 onClick={() => { setActiveTab(tab.id); setModalOpen(false); setEditingItem(null); setSearch(""); setPage(1); }}
                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   activeTab === tab.id
-                    ? "bg-slate-950 text-white"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                    ? "bg-slate-950 text-white dark:bg-white dark:text-gray-950"
+                    : "text-slate-600 dark:text-gray-400 hover:bg-slate-100 hover:text-slate-950 dark:hover:bg-gray-800 dark:hover:text-white"
                 }`}
               >
                 <Icon className="size-4" />
@@ -669,7 +669,7 @@ export default function AdminDashboard() {
       <div className="flex-1 min-w-0">
         {activeTab === "dashboard" ? (
           <>
-            <h1 className="mb-6 text-2xl font-semibold text-slate-950">Dashboard Overview</h1>
+            <h1 className="mb-6 text-2xl font-semibold text-slate-950 dark:text-white">Dashboard Overview</h1>
 
             <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <SummaryCard icon={ShoppingBag} label="Total Products" value={products.length} sub="In catalog" />
@@ -693,7 +693,7 @@ export default function AdminDashboard() {
         ) : (
           <>
             {error && (
-              <div className="mb-4 flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600">
+              <div className="mb-4 flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950 dark:text-red-400">
                 <AlertCircle className="size-4 shrink-0" />
                 {error}
               </div>
@@ -752,38 +752,38 @@ export default function AdminDashboard() {
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
+                      <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500 dark:text-gray-400">
                         Loading {activeTab}...
                       </TableCell>
                     </TableRow>
                   ) : paginated.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500">
+                      <TableCell colSpan={activeTab === "categories" ? 2 : 6} className="py-12 text-center text-sm text-slate-500 dark:text-gray-400">
                         No {activeTab} found.
                       </TableCell>
                     </TableRow>
                   ) : activeTab === "products" ? (
                     paginated.map((product) => (
                       <TableRow key={product.id}>
-                        <TableCell className="font-mono text-xs text-slate-500">{product.id}</TableCell>
+                        <TableCell className="font-mono text-xs text-slate-500 dark:text-gray-400">{product.id}</TableCell>
                         <TableCell className="max-w-56">
                           <div className="flex items-center gap-3">
                             {product.image && (
-                              <img src={product.image} alt="" className="size-8 rounded object-cover bg-slate-100" />
+                              <img src={product.image} alt="" className="size-8 rounded object-cover bg-slate-100 dark:bg-gray-900" />
                             )}
                             <span className="truncate font-medium">{product.title}</span>
                           </div>
                         </TableCell>
                         <TableCell>${product.price?.toFixed(2)}</TableCell>
-                        <TableCell className="text-slate-600 capitalize">{product.category}</TableCell>
+                        <TableCell className="text-slate-600 dark:text-gray-400 capitalize">{product.category}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
                             <button onClick={() => openEditForm(product)}
-                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
+                              className="rounded-md p-1.5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-gray-800 dark:hover:text-white">
                               <Pencil className="size-3.5" />
                             </button>
                             <button onClick={() => confirmDelete(product.id, "product")}
-                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
+                              className="rounded-md p-1.5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400">
                               <Trash2 className="size-3.5" />
                             </button>
                           </div>
@@ -793,15 +793,15 @@ export default function AdminDashboard() {
                   ) : activeTab === "users" ? (
                     paginated.map((u) => (
                       <TableRow key={u.id}>
-                        <TableCell className="font-mono text-xs text-slate-500">{u.id}</TableCell>
+                        <TableCell className="font-mono text-xs text-slate-500 dark:text-gray-400">{u.id}</TableCell>
                         <TableCell className="font-medium">
                           {u.name?.firstname ? `${u.name.firstname} ${u.name.lastname}` : u.fullName || "—"}
                         </TableCell>
-                        <TableCell className="text-slate-600">{u.email}</TableCell>
-                        <TableCell className="text-slate-600">{u.phone || "—"}</TableCell>
+                        <TableCell className="text-slate-600 dark:text-gray-400">{u.email}</TableCell>
+                        <TableCell className="text-slate-600 dark:text-gray-400">{u.phone || "—"}</TableCell>
                         <TableCell>
                           <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            u.role === "admin" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600"
+                            u.role === "admin" ? "bg-slate-900 text-white dark:bg-white dark:text-gray-950" : "bg-slate-100 text-slate-600 dark:bg-gray-900 dark:text-gray-400"
                           }`}>
                             {u.role || "user"}
                           </span>
@@ -809,11 +809,11 @@ export default function AdminDashboard() {
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
                             <button onClick={() => openEditForm(u)}
-                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
+                              className="rounded-md p-1.5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-gray-800 dark:hover:text-white">
                               <Pencil className="size-3.5" />
                             </button>
                             <button onClick={() => confirmDelete(u.id, "user")}
-                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
+                              className="rounded-md p-1.5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400">
                               <Trash2 className="size-3.5" />
                             </button>
                           </div>
@@ -827,11 +827,11 @@ export default function AdminDashboard() {
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
                             <button onClick={() => openEditForm(cat)}
-                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
+                              className="rounded-md p-1.5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-gray-800 dark:hover:text-white">
                               <Pencil className="size-3.5" />
                             </button>
                             <button onClick={() => confirmDelete(cat.name, "category")}
-                              className="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
+                              className="rounded-md p-1.5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400">
                               <Trash2 className="size-3.5" />
                             </button>
                           </div>

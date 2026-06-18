@@ -64,10 +64,10 @@ export default function Products() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Badge variant="secondary">Products</Badge>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
             Live catalog from Fake Store API.
           </h1>
-          <p className="mt-2 max-w-2xl text-slate-600">
+          <p className="mt-2 max-w-2xl text-slate-600 dark:text-gray-400">
             This page fetches product data with axios and renders the results in
             a responsive shadcn grid.
           </p>
@@ -80,7 +80,7 @@ export default function Products() {
       {loading ? (
         <Loader loading={loading} fullScreen={false} />
       ) : error ? (
-        <Card className="border-red-200 bg-red-50 p-6 text-red-700">
+        <Card className="border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400">
           <div className="flex items-start gap-3">
             <AlertCircle className="mt-0.5 size-5 shrink-0" />
             <div>
@@ -100,7 +100,7 @@ export default function Products() {
           </div>
 
           {paginated.length === 0 ? (
-            <Card className="flex items-center justify-center border-slate-200 bg-white p-10 text-slate-500">
+            <Card className="flex items-center justify-center border-slate-200 bg-white p-10 text-slate-500 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-400">
               No products match your search.
             </Card>
           ) : (

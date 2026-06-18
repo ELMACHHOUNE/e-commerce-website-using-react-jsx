@@ -23,17 +23,17 @@ export default function CartDrawer() {
 
       <div
         aria-hidden={!isOpen}
-        className={`fixed inset-y-0 right-0 z-50 w-full max-w-md transform bg-white shadow-lg transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 right-0 z-50 w-full max-w-md transform bg-white shadow-lg transition-transform duration-300 ease-in-out dark:bg-slate-950 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between border-b p-4">
-            <h3 className="text-lg font-medium flex items-center gap-2">
+          <div className="flex items-center justify-between border-b p-4 dark:border-slate-800">
+            <h3 className="text-lg font-medium flex items-center gap-2 dark:text-white">
               <ShoppingBag className="size-5" />
               Your cart
               {itemCount > 0 && (
-                <span className="inline-flex size-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-medium text-white">
+                <span className="inline-flex size-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-medium text-white dark:bg-white dark:text-slate-900">
                   {itemCount}
                 </span>
               )}
@@ -54,8 +54,8 @@ export default function CartDrawer() {
 
           <div className="flex-1 overflow-y-auto p-4">
             {items.length === 0 ? (
-              <Card className="p-6 text-center text-slate-600">
-                <ShoppingBag className="mx-auto size-8 mb-2 text-slate-300" />
+              <Card className="p-6 text-center text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+                <ShoppingBag className="mx-auto size-8 mb-2 text-slate-300 dark:text-slate-600" />
                 No items in cart.
               </Card>
             ) : (
@@ -68,10 +68,10 @@ export default function CartDrawer() {
                       className="h-16 w-16 rounded object-cover"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-slate-900 truncate">
+                      <div className="font-medium text-slate-900 truncate dark:text-white">
                         {it.title}
                       </div>
-                      <div className="text-sm text-slate-600">
+                      <div className="text-sm text-slate-600 dark:text-slate-400">
                         ${it.price} each
                       </div>
                       <div className="mt-2 flex items-center gap-2">
@@ -113,13 +113,13 @@ export default function CartDrawer() {
             )}
           </div>
 
-          <div className="border-t p-4 space-y-3">
+          <div className="border-t p-4 space-y-3 dark:border-slate-800">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-slate-600">Total</div>
-              <div className="font-medium text-lg">${total.toFixed(2)}</div>
+              <div className="text-sm text-slate-600 dark:text-slate-400">Total</div>
+              <div className="font-medium text-lg dark:text-white">${total.toFixed(2)}</div>
             </div>
             <Button
-              className="w-full bg-slate-900 text-white hover:bg-slate-800"
+              className="w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
               size="lg"
               disabled={items.length === 0}
               onClick={() => {

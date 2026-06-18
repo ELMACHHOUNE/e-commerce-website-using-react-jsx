@@ -18,13 +18,13 @@ export default function NotFound() {
         </div>
 
         <div className="flex flex-col items-center text-center md:items-start md:text-left">
-          <h1 className="mt-8 bg-gradient-to-r from-slate-800 to-slate-500 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
+          <h1 className="mt-8 bg-gradient-to-r from-slate-800 to-slate-500 bg-clip-text text-4xl font-bold text-transparent md:text-5xl dark:from-gray-100 dark:to-gray-400">
             404 Not Found
           </h1>
 
-          <div className="my-5 h-px w-48 rounded bg-gradient-to-r from-slate-300 to-slate-200 md:my-6 md:w-64" />
+          <div className="my-5 h-px w-48 rounded bg-gradient-to-r from-slate-300 to-slate-200 dark:from-gray-600 dark:to-gray-700 md:my-6 md:w-64" />
 
-          <p className="max-w-md text-slate-500 md:text-lg">
+          <p className="max-w-md text-slate-500 dark:text-gray-400 md:text-lg">
             The page you are looking for does not exist or has been moved.
           </p>
 
