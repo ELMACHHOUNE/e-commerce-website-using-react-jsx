@@ -8,7 +8,7 @@ export default function ProductCard({ product }) {
   const { addItem, toggle } = useCart();
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
+    <div className="group relative flex h-82 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
       <div className="relative flex-1 overflow-hidden bg-slate-50 dark:bg-slate-800">
         <img
           src={product.image}
@@ -43,7 +43,7 @@ export default function ProductCard({ product }) {
       </div>
 
       <div className="border-t border-slate-100 px-3 py-2.5 dark:border-slate-700">
-        <p className="line-clamp-1 text-xs font-medium text-slate-700 dark:text-slate-300">
+        <p className="line-clamp-1 text-xl font-medium text-slate-700 dark:text-slate-300">
           {product.title}
         </p>
       </div>
