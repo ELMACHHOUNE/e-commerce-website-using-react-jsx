@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom"
-import { Eye, ShoppingCart } from "lucide-react"
+import { useNavigate } from "react-router-dom";
+import { Eye, ShoppingCart } from "lucide-react";
 
-import { useCart } from "@/contexts/CartContext"
+import { useCart } from "@/contexts/CartContext";
 
 export default function ProductCard({ product }) {
-  const navigate = useNavigate()
-  const { addItem, toggle } = useCart()
+  const navigate = useNavigate();
+  const { addItem, toggle } = useCart();
 
   return (
     <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
@@ -27,7 +27,10 @@ export default function ProductCard({ product }) {
             </button>
             <button
               type="button"
-              onClick={() => { addItem(product); toggle(true) }}
+              onClick={() => {
+                addItem(product);
+                toggle(true);
+              }}
               className="flex size-10 items-center justify-center rounded-full bg-white shadow-md transition hover:scale-110"
             >
               <ShoppingCart className="size-5 text-slate-800" />
@@ -45,5 +48,5 @@ export default function ProductCard({ product }) {
         </p>
       </div>
     </div>
-  )
+  );
 }
