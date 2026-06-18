@@ -72,9 +72,6 @@ export default function Products() {
             a responsive shadcn grid.
           </p>
         </div>
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          Refresh data
-        </Button>
       </div>
 
       {loading ? (

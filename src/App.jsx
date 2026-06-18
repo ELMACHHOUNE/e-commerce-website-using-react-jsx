@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Categories from "./pages/Categories";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="about" element={<About />} />
             <Route path="products" element={<Products />} />
+            <Route path="products/:id" element={<ProductDetail />} />
             <Route path="categories" element={<Categories />} />
             <Route path="auth" element={<Auth />} />
             <Route path="checkout" element={<Checkout />} />
