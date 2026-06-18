@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import { Separator } from "@/components/ui/separator";
+
 const socialIcons = [
   {
     href: "https://facebook.com",
@@ -34,10 +36,10 @@ const pageLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-800">
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 md:grid-cols-3 px-4 sm:px-6 lg:px-8">
+    <footer className="border-t  border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+      <div className="mx-auto  grid w-full max-w-7xl grid-cols-1 md:grid-cols-3 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <div className="flex flex-col items-center justify-center border-b border-gray-200 px-8 py-12 text-center dark:border-gray-800 md:border-b-0 md:border-r">
+        <div className="flex flex-col items-center justify-center px-8 py-12 text-center md:border-r md:border-slate-200 md:dark:border-slate-800">
           <img
             src="/logo.png"
             alt="MSC Store"
@@ -46,14 +48,14 @@ export default function Footer() {
         </div>
 
         {/* Pages links */}
-        <div className="border-b border-gray-200 px-8 py-12 dark:border-gray-800 md:border-b-0">
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-gray-900 dark:text-gray-100">Pages</h2>
-          <div className="mt-6 space-y-3">
+        <div className="px-8 py-12 bg-black dark:bg-slate-900">
+          <h2 className="text-sm font-semibold tracking-wide uppercase text-white dark:text-gray-300">Pages</h2>
+          <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3">
             {pageLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.to}
-                className="block text-sm text-gray-500 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                className="text-sm text-white transition hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-100"
               >
                 {link.label}
               </Link>
@@ -88,7 +90,8 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <p className="mt-10 text-xs text-gray-400 dark:text-gray-600">
+          <Separator className="my-6 h-px w-full" />
+          <p className="text-xs text-gray-400 dark:text-gray-600">
             &copy; Copyright MSC Studios 2026. All rights reserved.
           </p>
         </div>
